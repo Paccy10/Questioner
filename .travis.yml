@@ -2,13 +2,10 @@ language: node_js
 node_js:
 - node
 
-before_script:
-  - npm install
-
 script: echo "Running tests against $(node -v)..."
 
 jobs:
   include:
     - stage: Produce Coverage
       node_js: node
-      script: jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+      script: jest --forceExit --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
