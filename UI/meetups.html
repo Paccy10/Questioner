@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>All Meetups | Questioner</title>
+	<link rel="stylesheet" type="text/css" href="./css/style.css">
+	<link rel="stylesheet" href="fontawesome-free/css/all.min.css">
+</head>
+<body>
+	<header>
+		<div class="logo"><span class="highlight">Que</span>stioner</div>
+		<nav>
+			<ul>
+				<li><a href="signin.html">Login</a></li>
+				<li><a href="signup.html">Signup</a></li>
+				<li class="current"><a href="meetups.html">Meetups</a></li>
+				<li class="sub-menu"><a href="#">Ndayisenga</a>
+					<ul>
+						<li><a href="profile.html">Profile</a></li>
+						<li><a href="#">Logout</a></li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+		<div class="menu-toggle">
+			<i class="fa fa-bars"></i>
+		</div>
+	</header>
+	<div class="content">
+		<div class="content-inside">
+			<div class="container">
+				<article id="meetups-article">
+					<table align="center" id="meetups-table">
+						<tr>
+							<td colspan="5" class="header"><h2>Questioner - All Meetups</h2></td>
+						</tr>
+						<tr>
+							<th>#</th>
+							<th>Topic</th>
+							<th>Location</th>
+							<th>Date & Time</th>
+							<th></th>
+						</tr>
+						<tr>
+							<td>1</td>
+							<td>Javascript Meetup</td>
+							<td>Kigali Heights</td>
+							<td>20/12/2018 12:30</td>
+							<td><a href="#" class="button_2">Details</a></td>
+						</tr>
+						<tr>
+							<td>2</td>
+							<td>Html & CSS Meetup</td>
+							<td>Musanze District Hall</td>
+							<td>20/01/2019 1:30</td>
+							<td><a href="#" class="button_2">Details</a></td>
+						</tr>
+						<tr>
+							<td>3</td>
+							<td>Java Meetup</td>
+							<td>UR, Huye Campus</td>
+							<td>20/12/2018 12:30</td>
+							<td><a href="#" class="button_2">Details</a></td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>Android Developers Meetup</td>
+							<td>Kigali Heights</td>
+							<td>20/12/2018 12:30</td>
+							<td><a href="#" class="button_2">Details</a></td>
+						</tr>
+					</table>
+				</article>
+			</div>
+		</div>
+	</div>
+	<footer>
+		<p>Questioner, Copyright &copy; 2018</p>
+	</footer>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+	  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	  crossorigin="anonymous"></script>
+	<script type="text/javascript">
+	 	$(document).ready(function(){
+	 		$('.menu-toggle').click(function(){
+	 			$('nav').toggleClass('current');
+	 		})
+
+	 		$('ul li').click(function(){
+		 		$(this).siblings().removeClass('current');
+		 		$(this).toggleClass('current');
+		 	})
+	 	});
+	 </script>
+</body>
+</html>
