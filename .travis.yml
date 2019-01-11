@@ -3,6 +3,7 @@ node_js:
 - node
 
 script: echo "Running tests against $(node -v)..."
+script: npm install
 
 jobs:
   include:
