@@ -1,0 +1,518 @@
+/*Global*/
+
+html, body {
+  	height: 100%;
+}
+
+body{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 15px;
+	line-height: 1.5;
+	padding: 0;
+	margin: 0;
+	background-color: #f4f4f4;
+}
+
+.content {
+  	min-height: 100%;
+  	margin-top: 50px;
+}
+
+.content-inside {
+  padding-bottom: 70px;
+}
+
+.container{
+	width: 80%;
+	margin: auto;
+	overflow: hidden;
+}
+
+.card{
+	background-color: #35424a;
+	padding: 20px;
+	border: #35424a solid 1px;
+	color: #ffffff;
+}
+
+/*Header*/
+header{
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: #35424a;
+	color: #ffffff;
+	padding: 0 100px;
+	width: 100%;
+	box-sizing: border-box; 
+}
+
+header .logo{
+	color: #ffffff;
+	height: 50px;
+	line-height: 50px;
+	font-size: 24px;
+	float: left;
+	font-weight: bold;
+}
+
+header nav{
+	float: right;
+}
+
+header nav ul{
+	margin: 0;
+	padding: 0;
+	display: flex;
+}
+
+header nav ul li{
+	list-style: none;
+	position: relative;
+}
+
+header nav ul li ul{
+	position: absolute;
+	left: 0;
+	background-color: #333;
+	display: none;
+}
+
+header nav ul li.sub-menu:before{
+	content: '\f0d7';
+	font-family: 'Font Awesome 5 Free';
+	font-weight: 900;
+	position: absolute;
+	line-height: 50px;
+	color: #ffffff;
+	right: 5px;
+}
+
+header nav ul li.current.sub-menu:before{
+	content: '\f0d8';
+}
+
+header nav ul li.current ul{
+	display: block;
+}
+
+header nav ul li ul li{
+	display: block;
+	width: 150px;
+}
+
+header nav ul li a{
+	height: 50px;
+	line-height: 50px;
+	padding: 0 20px;
+	color: #ffffff;
+	text-decoration: none;
+	display: block;
+}
+
+header nav ul li a:hover,
+header nav ul li.current{
+	background-color: #28a745;
+}
+
+.menu-toggle{
+	color: #ffffff;
+	float: right;
+	line-height: 50px;
+	font-size: 24px;
+	cursor: pointer;
+	display: none;
+}
+
+.logo .highlight{
+	color: #28a745;
+}
+
+/*Signup*/
+#signup-card{
+	width: 50%;
+	margin: auto;
+	margin-top: 20px;
+}
+
+
+
+div#signup-card .form input{
+	width: 97%;
+	padding: 7px;
+}
+
+div#signup-card .form div{
+	margin-bottom: 10px;
+}
+
+div#signup-card h2{
+	color: #28a745;
+}
+
+div#signup-card button{
+	margin-top: 15px;
+}
+
+.button_1{
+	height: 35px;
+	background-color: #28a745;
+	color: #ffffff;
+	border: 0;
+	padding-left: 20px;
+	padding-right: 20px;
+	cursor: pointer;
+
+}
+
+.button_1:hover{
+	background-color: #006C0E;
+
+}
+
+/*Signin*/
+#signin-card{
+	width: 30%;
+	margin: auto;
+	margin-top: 20px;
+}
+
+
+
+div#signin-card .form input{
+	width: 97%;
+	padding: 7px;
+}
+
+div#signin-card .form div{
+	margin-bottom: 10px;
+}
+
+div#signin-card h2{
+	color: #28a745;
+}
+
+div#signin-card button{
+	margin-top: 15px;
+}
+
+/*Meetups*/
+#meetups-table{
+	margin-top: 20px;
+	border: 1px solid black;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#meetups-table th{
+	background-color: #28a745;
+	color: #ffffff;
+}
+
+#meetups-table tr:nth-child(even){
+	background-color: #e8e8e8;
+}
+
+#meetups-table tr:nth-child(odd){
+	background-color: #ffffff;
+}
+
+#meetups-table .header{
+	background-color: #35424a;
+	color: #28a745;
+}
+
+#meetups-table th, td{
+	text-align: center;
+	padding: 10px;
+}
+
+.button_2{
+	text-decoration: none;
+	border: 1px solid #28a745;
+	color: #ffff;
+	background-color: #28a745;
+	padding: 5px;
+	border-radius: 7%;
+}
+
+.button_2:hover{
+	background-color: #006C0E;
+}
+
+#meetups-article{
+	overflow-x: auto;
+}
+
+/*Single Meetup*/
+#meetup-card{
+	border: 1px solid #cccccc;
+	padding: 20px;
+	margin-top: 20px;
+	background-color: #e6e6e6;
+	width: 70%;
+}
+
+#meetup-card img{
+	margin-bottom: 20px;
+}
+
+#meetup-card .button_1{
+	text-decoration: none;
+	padding: 10px;
+}
+
+div#meetup-card .form input{
+	width: 97%;
+	padding: 7px;
+}
+
+div#meetup-card .form textarea{
+	width: 97%;
+	padding: 7px;
+	margin-top: 10px; 
+}
+
+div#meetup-card .form div{
+	margin-bottom: 10px;
+}
+
+
+div#meetup-card button{
+	margin-top: 15px;
+}
+
+.questions{
+	width: 70%;
+}
+
+.question{
+	border: 1px solid #cccccc;
+	padding: 20px;
+	background-color: #ffffff;
+	margin-bottom: 20px;
+}
+
+.question .vote{
+
+	border: none;
+	background-color: inherit;
+	cursor: pointer;
+	font-size: 16px;
+	color: #606770;
+	padding: 10px;
+}
+
+.question .vote i{
+
+	margin-right: 5px;
+}
+
+.question input{
+	padding: 7px;
+	width: 70%;
+}
+
+.comment{
+
+  margin-bottom: 15px;
+  margin-top: 15px
+}
+
+.author-image{
+
+  width:50px;
+  height: 50px;
+  border-radius: 50%;
+  float: left;
+}
+
+.author-name{
+
+  float: left;
+  margin-left: 15px;
+}
+
+.author-name h5{
+
+  margin: 5px 0;
+}
+
+.author-time{
+
+  font-size: 11px;
+  font-style: italic;
+  color: #aaa;
+}
+
+.comment-content{
+
+  clear: both;
+  margin-left: 65px;
+}
+
+/*Profile*/
+.profile{
+	padding: 30px;
+	text-align: center;
+	background-color: #28a745;
+	color: #ffffff;
+}
+
+.profile img{
+	border: 1px solid #cccc;
+	border-radius: 50%;
+	width: 10%;
+}
+
+#profile-questions{
+	width: 80%;
+	margin: auto;
+	margin-top: 20px;
+}
+
+/*Admin Meetups*/
+div#new-meetup-card .form input{
+	width: 97%;
+	padding: 7px;
+}
+
+div#new-meetup-card .form div{
+	margin-bottom: 10px;
+}
+
+div#new-meetup-card h2{
+	color: #28a745;
+}
+
+div#new-meetup-card select{
+	width: 100%;
+	padding: 7px;
+}
+
+div#new-meetup-card button{
+	margin-top: 15px;
+}
+
+#admin-meetups-article{
+	float: left;
+	width: 65%;
+}
+
+#new-meetup-card{
+	float: right;
+	width: 25%;
+	margin-top: 20px;
+}
+
+.button_3{
+	text-decoration: none;
+	border: 1px solid #dc3545;
+	color: #ffff;
+	background-color: #dc3545;
+	padding: 5px;
+	border-radius: 7%;
+}
+
+.button_3:hover{
+	background-color: #6C0000;
+}
+
+#admin-meetups-article{
+	overflow-x: auto;
+}
+/*footer*/
+footer{
+	height: 50px;
+  	margin-top: -50px;
+  	padding: 20px;
+	color: #ffffff;
+	background-color: #28a745;
+	text-align: center;
+}
+
+/*Media queries*/
+@media(max-width: 768px){
+	header{
+		padding: 0 20px;
+	}
+
+	.menu-toggle{
+		display: block;
+	}
+
+	header nav{
+		position: absolute;
+		width: 100%;
+		height: calc(100vh - 50px);
+		background-color: #35424a; 
+		top: 50px;
+		left: -100%;
+		transition: 0.5s;
+	}
+
+	header nav.current{
+		left: 0;
+	}
+
+	header nav ul{
+		display: block;
+		text-align: center;
+	}
+
+	header nav ul li a{
+		border-bottom: 1px solid rgba(0,0,0,0.2);
+	}
+
+	header nav ul li.current ul{
+		position: relative;
+	}
+
+	header nav ul li ul li{
+		width: 100%;
+	}
+
+	#signup-card{
+		width: 90%;
+		margin: auto;
+		margin-top: 20px;
+	}
+
+	#signin-card{
+		width: 90%;
+		margin: auto;
+		margin-top: 20px;
+	}
+
+	#meetup-card{
+		width: 90%;
+	}
+
+	.questions{
+		width: 100%;
+	}
+
+	.question input{
+		width: 60%;
+	}
+
+	#profile-questions{
+		float: none;
+		width: 100%;
+	}
+
+	.profile img{
+		width: 20%;
+	}
+
+	#admin-meetups-article{
+		float: none;
+		width: 100%;
+	}
+
+	#new-meetup-card{
+		float: none;
+		width: 90%;
+	}
+
+}
