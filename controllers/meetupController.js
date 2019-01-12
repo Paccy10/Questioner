@@ -9,7 +9,7 @@ const meetups = [
     location: 'Telecom House',
     images: ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'],
     topic: 'Nodejs Meetup',
-    happeningOn: '20-01-2019',
+    happeningOn: '2019-01-10',
     tags: ['Javascript', 'Programming'],
   },
   {
@@ -18,28 +18,7 @@ const meetups = [
     location: 'Telecom House',
     images: ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'],
     topic: 'Express Meetup',
-    happeningOn: '20-01-2019',
-    tags: ['Javascript', 'Programming'],
-  },
-];
-
-const upcomingMeetups = [
-  {
-    id: 1,
-    createdOn: '03-01-2019',
-    location: 'Telecom House',
-    images: ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'],
-    topic: 'Nodejs Meetup',
-    happeningOn: '20-01-2019',
-    tags: ['Javascript', 'Programming'],
-  },
-  {
-    id: 2,
-    createdOn: '03-01-2019',
-    location: 'Telecom House',
-    images: ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'],
-    topic: 'Express Meetup',
-    happeningOn: '20-01-2019',
+    happeningOn: '2019-01-20',
     tags: ['Javascript', 'Programming'],
   },
 ];
@@ -82,20 +61,14 @@ router.get('/', function (req, res) {
 });
 
 router.get('/upcoming', function (req, res) {
-  if (upcomingMeetups) {
-    const resultMeetups = [];
-    for (let i = 0; i < upcomingMeetups.length; i++) {
-      const meetup = {
-        id: upcomingMeetups[i].id,
-        title: upcomingMeetups[i].topic,
-        location: upcomingMeetups[i].location,
-        happeningOn: upcomingMeetups[i].happeningOn,
-        tags: upcomingMeetups[i].tags,
-      };
-
-      resultMeetups.push(meetup);
+  if (meetups) {
+    const upcomingMeetups = [];
+    for (let i = 0; i < meetups.length; i++) {
+      if (meetups[i].happeningOn > new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')) {
+        upcomingMeetups.push(meetups[i]);
+      }
     }
-    const jsonResponse = { status: 200, data: resultMeetups };
+    const jsonResponse = { status: 200, data: upcomingMeetups };
     res.json(jsonResponse);
   } else {
     const jsonResponse = { status: 404, error: 'Error' };
