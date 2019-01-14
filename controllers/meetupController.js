@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const Joi = require('joi');
+
 const meetups = [
   {
     id: 1,
@@ -37,6 +39,25 @@ const rsvps = [
     response: 'No',
   },
 ];
+
+function validateMeetup(meetup) {
+  const schema = Joi.object({
+    location: Joi.string().required(),
+    topic: Joi.string().required(),
+    happeningOn: Joi.string().required(),
+  }).unknown();
+
+  return Joi.validate(meetup, schema);
+}
+
+function validateRsvp(rsvp) {
+  const schema = Joi.object({
+    user: Joi.number().integer().min(1).required(),
+    response: Joi.string().required(),
+  }).unknown();
+
+  return Joi.validate(rsvp, schema);
+}
 
 router.get('/', function (req, res) {
   if (meetups) {
@@ -110,7 +131,12 @@ router.post('/', function (req, res) {
 
   let jsonResponse = {};
 
-  if (meetups.push(meetup)) {
+  const { error } = validateMeetup(meetup);
+
+  if (error) {
+    jsonResponse = { status: 404, error: error.details[0].message };
+    res.json(jsonResponse);
+  } else {
     const response = [
       {
         topic: meetup.topic,
@@ -119,10 +145,8 @@ router.post('/', function (req, res) {
         tags: meetup.tags,
       },
     ];
+    meetups.push(meetup);
     jsonResponse = { status: 200, data: response };
-    res.json(jsonResponse);
-  } else {
-    jsonResponse = { status: 404, error: 'Meetup not saved!' };
     res.json(jsonResponse);
   }
 });
@@ -131,30 +155,32 @@ router.post('/:id/rsvps', function (req, res) {
   const meetup = meetups.find(c => c.id === parseInt(req.params.id));
   const result = [];
   let jsonResponse = {};
+  const rsvp = {
+    id: rsvps.length + 1,
+    meetup: req.params.id,
+    user: req.body.user,
+    response: req.body.response,
+  };
+  const { error } = validateRsvp(rsvp);
   if (!meetup) {
     jsonResponse = { status: 404, error: 'The Meetup with given ID is not found' };
     res.json(jsonResponse);
+  } else if (error) {
+    jsonResponse = { status: 404, error: error.details[0].message };
+    res.json(jsonResponse);
   } else {
-    const rsvp = {
-      id: rsvps.length + 1,
-      meetup: req.params.id,
-      user: req.body.user,
-      response: req.body.response,
+    const resultRsvp = {
+      meetup: rsvp.meetup,
+      topic: meetup.topic,
+      status: rsvp.response,
+      user: rsvp.user,
     };
-    if (rsvps.push(rsvp)) {
-      const resultRsvp = {
-        meetup: rsvp.meetup,
-        topic: meetup.topic,
-        status: rsvp.response,
-      };
-      result.push(resultRsvp);
-      jsonResponse = { status: 200, data: result };
-      res.json(jsonResponse);
-    } else {
-      jsonResponse = { status: 404, error: 'Error' };
-      res.json(jsonResponse);
-    }
+    rsvps.push(rsvp);
+    result.push(resultRsvp);
+    jsonResponse = { status: 200, data: result };
+    res.json(jsonResponse);
   }
 });
+
 
 module.exports = router;
