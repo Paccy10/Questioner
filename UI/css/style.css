@@ -129,10 +129,16 @@ header nav ul li.current{
 }
 
 /*Signup*/
+.container-img{
+	background-image: url('../img/meeting.jpg');
+	background-size: cover;
+}
 #signup-card{
-	width: 50%;
+	width: 35%;
 	margin: auto;
-	margin-top: 20px;
+	margin-top: 7%;
+	border-radius: 2%;
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 
@@ -172,9 +178,11 @@ div#signup-card button{
 
 /*Signin*/
 #signin-card{
-	width: 30%;
+	width: 35%;
 	margin: auto;
-	margin-top: 20px;
+	margin-top: 12%;
+	border-radius: 2%;
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 
@@ -198,7 +206,8 @@ div#signin-card button{
 
 /*Meetups*/
 #meetups-table{
-	margin-top: 20px;
+	margin-top: 30px;
+	margin-bottom: 30px;
 	border: 1px solid black;
 	border-collapse: collapse;
 	width: 100%;
@@ -248,6 +257,7 @@ div#signin-card button{
 #meetup-card{
 	border: 1px solid #cccccc;
 	padding: 20px;
+	margin: auto; 
 	margin-top: 20px;
 	background-color: #e6e6e6;
 	width: 70%;
@@ -282,15 +292,13 @@ div#meetup-card button{
 	margin-top: 15px;
 }
 
-.questions{
-	width: 70%;
-}
-
 .question{
 	border: 1px solid #cccccc;
 	padding: 20px;
 	background-color: #ffffff;
-	margin-bottom: 20px;
+	width: 70%;
+	margin: auto;
+	margin-top: 20px;
 }
 
 .question .vote{
@@ -365,8 +373,13 @@ div#meetup-card button{
 	width: 10%;
 }
 
-#profile-questions{
-	width: 80%;
+.profile-question-title{
+	width: 74%;
+	margin: auto;
+}
+
+.profile-question{
+	width: 70%;
 	margin: auto;
 	margin-top: 20px;
 }
@@ -402,7 +415,7 @@ div#new-meetup-card button{
 #new-meetup-card{
 	float: right;
 	width: 25%;
-	margin-top: 20px;
+	margin-top: 30px;
 }
 
 .button_3{
@@ -473,32 +486,31 @@ footer{
 	}
 
 	#signup-card{
-		width: 90%;
+		width: 80%;
 		margin: auto;
-		margin-top: 20px;
+		margin-top: 14%;
 	}
 
 	#signin-card{
-		width: 90%;
+		width: 80%;
 		margin: auto;
-		margin-top: 20px;
+		margin-top: 22%;
 	}
 
 	#meetup-card{
 		width: 90%;
 	}
 
-	.questions{
-		width: 100%;
+	.question{
+		width: 90%;
 	}
 
 	.question input{
 		width: 60%;
 	}
 
-	#profile-questions{
-		float: none;
-		width: 100%;
+	.profile-question-title{
+		width: 98%;
 	}
 
 	.profile img{
