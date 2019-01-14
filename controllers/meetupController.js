@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const Joi = require('joi');
+
 const meetups = [
   {
     id: 1,
@@ -9,7 +11,7 @@ const meetups = [
     location: 'Telecom House',
     images: ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'],
     topic: 'Nodejs Meetup',
-    happeningOn: '20-01-2019',
+    happeningOn: '2019-01-10',
     tags: ['Javascript', 'Programming'],
   },
   {
@@ -18,28 +20,7 @@ const meetups = [
     location: 'Telecom House',
     images: ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'],
     topic: 'Express Meetup',
-    happeningOn: '20-01-2019',
-    tags: ['Javascript', 'Programming'],
-  },
-];
-
-const upcomingMeetups = [
-  {
-    id: 1,
-    createdOn: '03-01-2019',
-    location: 'Telecom House',
-    images: ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'],
-    topic: 'Nodejs Meetup',
-    happeningOn: '20-01-2019',
-    tags: ['Javascript', 'Programming'],
-  },
-  {
-    id: 2,
-    createdOn: '03-01-2019',
-    location: 'Telecom House',
-    images: ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'],
-    topic: 'Express Meetup',
-    happeningOn: '20-01-2019',
+    happeningOn: '2019-01-20',
     tags: ['Javascript', 'Programming'],
   },
 ];
@@ -58,6 +39,25 @@ const rsvps = [
     response: 'No',
   },
 ];
+
+function validateMeetup(meetup) {
+  const schema = Joi.object({
+    location: Joi.string().required(),
+    topic: Joi.string().required(),
+    happeningOn: Joi.string().required(),
+  }).unknown();
+
+  return Joi.validate(meetup, schema);
+}
+
+function validateRsvp(rsvp) {
+  const schema = Joi.object({
+    user: Joi.number().integer().min(1).required(),
+    response: Joi.string().required(),
+  }).unknown();
+
+  return Joi.validate(rsvp, schema);
+}
 
 router.get('/', function (req, res) {
   if (meetups) {
@@ -82,20 +82,14 @@ router.get('/', function (req, res) {
 });
 
 router.get('/upcoming', function (req, res) {
-  if (upcomingMeetups) {
-    const resultMeetups = [];
-    for (let i = 0; i < upcomingMeetups.length; i++) {
-      const meetup = {
-        id: upcomingMeetups[i].id,
-        title: upcomingMeetups[i].topic,
-        location: upcomingMeetups[i].location,
-        happeningOn: upcomingMeetups[i].happeningOn,
-        tags: upcomingMeetups[i].tags,
-      };
-
-      resultMeetups.push(meetup);
+  if (meetups) {
+    const upcomingMeetups = [];
+    for (let i = 0; i < meetups.length; i++) {
+      if (meetups[i].happeningOn > new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')) {
+        upcomingMeetups.push(meetups[i]);
+      }
     }
-    const jsonResponse = { status: 200, data: resultMeetups };
+    const jsonResponse = { status: 200, data: upcomingMeetups };
     res.json(jsonResponse);
   } else {
     const jsonResponse = { status: 404, error: 'Error' };
@@ -137,7 +131,12 @@ router.post('/', function (req, res) {
 
   let jsonResponse = {};
 
-  if (meetups.push(meetup)) {
+  const { error } = validateMeetup(meetup);
+
+  if (error) {
+    jsonResponse = { status: 404, error: error.details[0].message };
+    res.json(jsonResponse);
+  } else {
     const response = [
       {
         topic: meetup.topic,
@@ -146,10 +145,8 @@ router.post('/', function (req, res) {
         tags: meetup.tags,
       },
     ];
+    meetups.push(meetup);
     jsonResponse = { status: 200, data: response };
-    res.json(jsonResponse);
-  } else {
-    jsonResponse = { status: 404, error: 'Meetup not saved!' };
     res.json(jsonResponse);
   }
 });
@@ -158,30 +155,32 @@ router.post('/:id/rsvps', function (req, res) {
   const meetup = meetups.find(c => c.id === parseInt(req.params.id));
   const result = [];
   let jsonResponse = {};
+  const rsvp = {
+    id: rsvps.length + 1,
+    meetup: req.params.id,
+    user: req.body.user,
+    response: req.body.response,
+  };
+  const { error } = validateRsvp(rsvp);
   if (!meetup) {
     jsonResponse = { status: 404, error: 'The Meetup with given ID is not found' };
     res.json(jsonResponse);
+  } else if (error) {
+    jsonResponse = { status: 404, error: error.details[0].message };
+    res.json(jsonResponse);
   } else {
-    const rsvp = {
-      id: rsvps.length + 1,
-      meetup: req.params.id,
-      user: req.body.user,
-      response: req.body.response,
+    const resultRsvp = {
+      meetup: rsvp.meetup,
+      topic: meetup.topic,
+      status: rsvp.response,
+      user: rsvp.user,
     };
-    if (rsvps.push(rsvp)) {
-      const resultRsvp = {
-        meetup: rsvp.meetup,
-        topic: meetup.topic,
-        status: rsvp.response,
-      };
-      result.push(resultRsvp);
-      jsonResponse = { status: 200, data: result };
-      res.json(jsonResponse);
-    } else {
-      jsonResponse = { status: 404, error: 'Error' };
-      res.json(jsonResponse);
-    }
+    rsvps.push(rsvp);
+    result.push(resultRsvp);
+    jsonResponse = { status: 200, data: result };
+    res.json(jsonResponse);
   }
 });
+
 
 module.exports = router;

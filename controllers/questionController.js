@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const Joi = require('joi');
+
 const questions = [
   {
     id: 1,
@@ -23,6 +25,17 @@ const questions = [
   },
 ];
 
+function validateQuestion(question) {
+  const schema = Joi.object({
+    createdBy: Joi.number().integer().min(1).required(),
+    meetup: Joi.number().integer().min(1).required(),
+    title: Joi.string().required(),
+    body: Joi.string().required(),
+  }).unknown();
+
+  return Joi.validate(question, schema);
+}
+
 router.post('/', (req, res) => {
   const question = {
     id: questions.length + 1,
@@ -36,7 +49,12 @@ router.post('/', (req, res) => {
 
   let jsonResponse = {};
 
-  if (questions.push(question)) {
+  const { error } = validateQuestion(question);
+
+  if (error) {
+    jsonResponse = { status: 404, error: error.details[0].message };
+    res.json(jsonResponse);
+  } else {
     const resultQuestion = [
       {
         user: question.createdBy,
@@ -45,10 +63,8 @@ router.post('/', (req, res) => {
         body: question.body,
       },
     ];
+    questions.push(question);
     jsonResponse = { status: 200, data: resultQuestion };
-    res.json(jsonResponse);
-  } else {
-    jsonResponse = { status: 404, error: 'Meetup not saved!' };
     res.json(jsonResponse);
   }
 });
