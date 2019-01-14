@@ -33,11 +33,11 @@ describe('Meetups', () => {
 
   it('should POST a meetup', (done) => {
     const meetup = {
-      created_on: '03-01-2019',
+      createdOn: '03-01-2019',
       location: 'Telecom House',
       images: ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'],
       topic: 'Nodejs Meetup',
-      happening_on: '20-01-2019',
+      happeningOn: '20-01-2019',
       tags: ['Javascript', 'Programming'],
     };
     chai.request(app)
