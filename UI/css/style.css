@@ -385,9 +385,14 @@ div#meetup-card button{
 }
 
 /*Admin Meetups*/
+div#new-meetup-card .form{
+	width: 100%;
+}
 div#new-meetup-card .form input{
-	width: 97%;
+	width: 100%;
+	box-sizing: border-box;
 	padding: 7px;
+	background-color: #fff;
 }
 
 div#new-meetup-card .form div{
