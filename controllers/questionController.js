@@ -4,6 +4,10 @@ const router = express.Router();
 
 const Joi = require('joi');
 
+const bodyParser = require('body-parser');
+
+router.use(bodyParser.urlencoded({ extended: false }));
+
 const questions = [
   {
     id: 1,
