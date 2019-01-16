@@ -18,5 +18,7 @@
 		"object-shorthand": "off",
 		"prefer-template": "off",
 		"max-len": "off",
+		"eqeqeq": "off",
+		"no-lonely-if": "off",
 	}
 }
