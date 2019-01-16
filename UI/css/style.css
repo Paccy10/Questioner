@@ -144,7 +144,9 @@ header nav ul li.current{
 
 
 div#signup-card .form input{
-	width: 97%;
+	box-sizing: border-box;
+	padding: 7px;
+	width: 100%;
 	padding: 7px;
 }
 
@@ -188,7 +190,9 @@ div#signup-card button{
 
 
 div#signin-card .form input{
-	width: 97%;
+	box-sizing: border-box;
+	padding: 7px;
+	width: 100%;
 	padding: 7px;
 }
 
