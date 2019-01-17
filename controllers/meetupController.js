@@ -161,9 +161,9 @@ router.post('/', function (req, res) {
   const meetup = {
     id: meetups.length + 1,
     createdOn: moment(new Date()).format('YYYY-MM-DD'),
-    location: req.body.location,
+    location: req.body.location.trim().replace(/\s+/g, ' '),
     images: req.body.images,
-    topic: req.body.topic,
+    topic: req.body.topic.trim().replace(/\s+/g, ' '),
     happeningOn: req.body.happeningOn,
     tags: req.body.tags,
   };
@@ -207,7 +207,7 @@ router.post('/:id/rsvps', function (req, res) {
     id: rsvps.length + 1,
     meetup: parseInt(req.params.id),
     user: parseInt(req.body.user),
-    response: req.body.response,
+    response: req.body.response.trim().replace(/\s+/g, ' '),
   };
   const { error } = validateRsvp(rsvp);
   if (error) {
@@ -222,15 +222,21 @@ router.post('/:id/rsvps', function (req, res) {
         jsonResponse = { status: 404, error: 'The User with given ID is not found' };
         res.json(jsonResponse);
       } else {
-        const resultRsvp = {
-          meetup: rsvp.meetup,
-          topic: meetup.topic,
-          status: rsvp.response,
-        };
-        rsvps.push(rsvp);
-        result.push(resultRsvp);
-        jsonResponse = { status: 200, data: result };
-        res.json(jsonResponse);
+        if (rsvp.response.toLowerCase() === 'yes' || rsvp.response.toLowerCase() === 'no' || rsvp.response.toLowerCase() === 'maybe') {
+          const resultRsvp = {
+            meetup: rsvp.meetup,
+            topic: meetup.topic,
+            status: rsvp.response,
+            user: rsvp.user,
+          };
+          rsvps.push(rsvp);
+          result.push(resultRsvp);
+          jsonResponse = { status: 200, data: result };
+          res.json(jsonResponse);
+        } else {
+          jsonResponse = { status: 404, error: 'Invalid response' };
+          res.json(jsonResponse);
+        }
       }
     }
   }
