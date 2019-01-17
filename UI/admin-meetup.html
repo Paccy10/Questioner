@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>All Meetups | Questioner</title>
+	<link rel="stylesheet" type="text/css" href="./css/style.css">
+	<link rel="stylesheet" href="fontawesome-free/css/all.min.css">
+</head>
+<body>
+	<header>
+		<div class="logo"><span class="highlight">Que</span>stioner</div>
+		<nav>
+			<ul>
+				<li><a href="signin.html">Login</a></li>
+				<li><a href="signup.html">Signup</a></li>
+				<li class="current"><a href="meetups.html">Meetups</a></li>
+				<li class="sub-menu"><a href="#">Ndayisenga</a>
+					<ul>
+						<li><a href="profile.html">Profile</a></li>
+						<li><a href="#">Logout</a></li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+		<div class="menu-toggle">
+			<i class="fa fa-bars"></i>
+		</div>
+	</header>
+	<div class="content">
+		<div class="content-inside">
+			<div class="container">
+				<div id="admin-meetup-card">
+					<h2>Javascript Meetup</h2>
+					<p><strong>Venue:</strong> Kigali Heights</p>
+					<p><strong>Time:</strong> 20/12/2018 12:30</p>
+					<p><strong>Tags:</strong> 
+						<span lass="tag">Programming</span>
+						<span lass="tag">Javascript</span>
+						<span lass="tag">Coding</span>
+					</p>
+					<p><strong>Images URLs:</strong>
+						<ul>
+							<li>Image 1</li>
+							<li>Image 2</li>
+						</ul>
+					</p>
+				</div>
+				<div class="forms">
+					<div class="tags">
+						<form>
+							<h3>Add a new Tag</h3>
+							<input type="text" name="tag">
+							<button type="submit" class="button_1">Add</button>
+						</form>
+					</div>
+					<div class="images">
+						<form>
+							<h3>Add a new Image URL</h3>
+							<input type="text" name="image">
+							<button type="submit" class="button_1">Add</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer>
+		<p>Questioner, Copyright &copy; 2018</p>
+	</footer>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+	  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	  crossorigin="anonymous"></script>
+	<script type="text/javascript">
+	 	$(document).ready(function(){
+	 		$('.menu-toggle').click(function(){
+	 			$('nav').toggleClass('current');
+	 		})
+
+	 		$('ul li').click(function(){
+		 		$(this).siblings().removeClass('current');
+		 		$(this).toggleClass('current');
+		 	})
+	 	});
+	 </script>
+</body>
+</html>
