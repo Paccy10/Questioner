@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 
+const moment = require('moment');
+
 const meetups = [
   {
     id: 1,
@@ -101,11 +103,11 @@ function validateUser(user) {
 router.post('/', (req, res) => {
   const question = {
     id: questions.length + 1,
-    createdOn: new Date(),
+    createdOn: moment(new Date()).format('YYYY-MM-DD'),
     meetup: parseInt(req.params.meetup_id),
     user: parseInt(req.body.user),
-    title: req.body.title,
-    body: req.body.body,
+    title: req.body.title.trim().replace(/\s+/g, ' '),
+    body: req.body.body.trim().replace(/\s+/g, ' '),
     upvotes: 0,
     downvotes: 0,
   };
