@@ -267,13 +267,14 @@ div#signin-card button{
 	width: 70%;
 }
 
-#meetup-card img{
-	margin-bottom: 20px;
-}
-
 #meetup-card .button_1{
 	text-decoration: none;
 	padding: 10px;
+}
+
+#meetup-card .form select{
+	width: 40%;
+	padding: 7px;
 }
 
 div#meetup-card .form input{
@@ -440,9 +441,68 @@ div#new-meetup-card button{
 	background-color: #6C0000;
 }
 
+.button_4{
+	text-decoration: none;
+	color: #212529;
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+	padding: 5px;
+	border-radius: 7%;
+	margin-right: 3px;
+}
+
+.button_4:hover {
+	background-color: #F0F0F0;
+}
+
 #admin-meetups-article{
 	overflow-x: auto;
 }
+
+/*Admin-meetup*/
+#admin-meetup-card{
+	border: 1px solid #cccccc;
+	padding: 20px;
+	margin-top: 20px;
+	background-color: #e6e6e6;
+	width: 60%;
+	float: left;
+}
+
+.forms{
+	float: right;
+	margin-top: 20px;
+	width: 30%;
+}
+
+.forms input{
+	width: 100%;
+	box-sizing: border-box;
+	padding: 7px;
+}
+
+.forms h3{
+	text-align: center;
+}
+
+.tags{
+	border: 1px solid #cccccc;
+	padding: 20px;
+	background-color: #e6e6e6;
+}
+
+.images{
+	border: 1px solid #cccccc;
+	padding: 20px;
+	background-color: #e6e6e6;
+	margin-top: 20px;
+}
+
+.forms .button_1{
+	width: 100%;
+	margin-top: 10px;
+}
+/*/////////////*/
 /*footer*/
 footer{
 	height: 50px;
@@ -510,6 +570,11 @@ footer{
 		width: 90%;
 	}
 
+	#meetup-card .form select{
+		width: 50%;
+		padding: 7px;
+	}
+
 	.question{
 		width: 90%;
 	}
@@ -534,6 +599,16 @@ footer{
 	#new-meetup-card{
 		float: none;
 		width: 90%;
+	}
+
+	#admin-meetup-card{
+		float: none;
+		width: 100%;
+	}
+
+	.forms{
+		float: none;
+		width: 100%;
 	}
 
 }
