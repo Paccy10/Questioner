@@ -13,7 +13,7 @@ const moment = require('moment');
 const meetups = [
   {
     id: 1,
-    createdOn: '03-01-2019',
+    createdOn: '2019-01-03',
     location: 'Telecom House',
     images: ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'],
     topic: 'Nodejs Meetup',
@@ -22,7 +22,7 @@ const meetups = [
   },
   {
     id: 2,
-    createdOn: '03-01-2019',
+    createdOn: '2019-01-03',
     location: 'Telecom House',
     images: ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'],
     topic: 'Express Meetup',
@@ -137,23 +137,28 @@ router.get('/upcoming', function (req, res) {
 });
 
 router.get('/:id', function (req, res) {
-  const meetup = meetups.find(c => c.id === parseInt(req.params.id));
   const result = [];
   let jsonResponse = {};
-  if (!meetup) {
-    jsonResponse = { status: 404, error: 'The Meetup with given ID is not found' };
+  if (!Number.isInteger(Number(req.params.id))) {
+    jsonResponse = { status: 404, error: 'The Meetup ID must be an integer' };
     res.json(jsonResponse);
   } else {
-    const resultMeetup = {
-      id: meetup.id,
-      topic: meetup.topic,
-      location: meetup.location,
-      happeningOn: meetup.happeningOn,
-      tags: meetup.tags,
-    };
-    result.push(resultMeetup);
-    jsonResponse = { status: 200, data: result };
-    res.json(jsonResponse);
+    const meetup = meetups.find(c => c.id === parseInt(req.params.id));
+    if (!meetup) {
+      jsonResponse = { status: 404, error: 'The Meetup with given ID is not found' };
+      res.json(jsonResponse);
+    } else {
+      const resultMeetup = {
+        id: meetup.id,
+        topic: meetup.topic,
+        location: meetup.location,
+        happeningOn: meetup.happeningOn,
+        tags: meetup.tags,
+      };
+      result.push(resultMeetup);
+      jsonResponse = { status: 200, data: result };
+      res.json(jsonResponse);
+    }
   }
 });
 
@@ -164,7 +169,7 @@ router.post('/', function (req, res) {
     location: req.body.location.trim().replace(/\s+/g, ' '),
     images: req.body.images,
     topic: req.body.topic.trim().replace(/\s+/g, ' '),
-    happeningOn: req.body.happeningOn,
+    happeningOn: req.body.happeningOn.trim(),
     tags: req.body.tags,
   };
 
@@ -176,8 +181,11 @@ router.post('/', function (req, res) {
     jsonResponse = { status: 404, error: error.details[0].message };
     res.json(jsonResponse);
   } else {
-    if (!moment(meetup.happeningOn, 'YYYY-MM-DD', true).isValid()) {
-      jsonResponse = { status: 404, error: 'Invalid date format' };
+    if (meetup.happeningOn.length == 0) {
+      jsonResponse = { status: 404, error: 'happeningOn is required' };
+      res.json(jsonResponse);
+    } else if (!moment(meetup.happeningOn, 'YYYY-MM-DD', true).isValid()) {
+      jsonResponse = { status: 404, error: 'Invalid date format.It must be(YYYY-MM-DD)' };
       res.json(jsonResponse);
     } else if (meetup.happeningOn < meetup.createdOn) {
       jsonResponse = { status: 404, error: 'Invalid date' };
@@ -205,8 +213,8 @@ router.post('/:id/rsvps', function (req, res) {
   let jsonResponse = {};
   const rsvp = {
     id: rsvps.length + 1,
-    meetup: parseInt(req.params.id),
-    user: parseInt(req.body.user),
+    meetup: req.params.id,
+    user: req.body.user,
     response: req.body.response.trim().replace(/\s+/g, ' '),
   };
   const { error } = validateRsvp(rsvp);
@@ -224,10 +232,10 @@ router.post('/:id/rsvps', function (req, res) {
       } else {
         if (rsvp.response.toLowerCase() === 'yes' || rsvp.response.toLowerCase() === 'no' || rsvp.response.toLowerCase() === 'maybe') {
           const resultRsvp = {
-            meetup: rsvp.meetup,
+            meetup: parseInt(rsvp.meetup),
             topic: meetup.topic,
             status: rsvp.response,
-            user: rsvp.user,
+            user: parseInt(rsvp.user),
           };
           rsvps.push(rsvp);
           result.push(resultRsvp);
