@@ -49,7 +49,7 @@ describe('Meetups', () => {
       location: 'Telecom House',
       images: ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'],
       topic: 'Nodejs Meetup',
-      happeningOn: '2019-01-20',
+      happeningOn: '2019-03-20',
       tags: ['Javascript', 'Programming'],
     };
     chai.request(app)
