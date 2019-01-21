@@ -22,7 +22,7 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-function validateUser(user) {
+function validateUserSignup(user) {
   const schema = Joi.object({
     firstname: Joi.string().required(),
     lastname: Joi.string().required(),
@@ -36,6 +36,15 @@ function validateUser(user) {
   return Joi.validate(user, schema);
 }
 
+function validateUserLogin(user) {
+  const schema = Joi.object({
+    username: Joi.string().required(),
+    password: Joi.string().min(6).required(),
+  }).unknown();
+
+  return Joi.validate(user, schema);
+}
+
 router.post('/signup', function (req, res) {
   const user = {
     firstname: req.body.firstname.trim().replace(/\s+/g, ' '),
@@ -44,11 +53,11 @@ router.post('/signup', function (req, res) {
     email: req.body.email.trim().replace(/\s+/g, ''),
     phone_number: req.body.phone_number.trim(),
     username: req.body.username.trim().replace(/\s+/g, ' '),
-    password: req.body.password.trim().replace(/\s+/g, ''),
+    password: req.body.password.trim().replace(/\s+/g, ' '),
     registered: moment(new Date()),
   };
 
-  const { error } = validateUser(user);
+  const { error } = validateUserSignup(user);
   if (error) {
     res.json({ status: 404, error: error.details[0].message });
   } else {
@@ -75,6 +84,44 @@ router.post('/signup', function (req, res) {
         }
       });
     }
+  }
+});
+
+router.post('/login', function (req, res) {
+  const user = {
+    username: req.body.username.trim().replace(/\s+/g, ' '),
+    password: req.body.password.trim().replace(/\s+/g, ' '),
+  };
+
+  const { error } = validateUserLogin(user);
+  if (error) {
+    res.json({ status: 404, error: error.details[0].message });
+  } else {
+    const query = 'SELECT * FROM users WHERE username = $1';
+    const values = [user.username];
+
+    pool.connect((er, client, done) => {
+      if (er) throw er;
+      client.query(query, values, (e, r) => {
+        done();
+        if (e) {
+          res.json({ status: 404, error: e.detail });
+        } else {
+          if (r.rowCount == 0) {
+            res.json({ status: 404, error: 'Incorrect username' });
+          } else {
+            const hash = r.rows[0].password;
+            bcrypt.compare(user.password, hash, function (err, response) {
+              if (response) {
+                res.json({ status: 202, data: r.rows });
+              } else {
+                res.json({ status: 404, error: 'Incorrect password' });
+              }
+            });
+          }
+        }
+      });
+    });
   }
 });
 
