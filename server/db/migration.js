@@ -14,7 +14,8 @@ pool.on('connect', () => {
 /**
  * Create Tables
  */
-const createTable = () => {
+const createTables = () => {
+  const queries = [];
   const usersQuery = `CREATE TABLE IF NOT EXISTS
                       users(
                         id SERIAL NOT NULL PRIMARY KEY,
@@ -28,33 +29,40 @@ const createTable = () => {
                         registered TIMESTAMP NOT NULL,
                         is_admin BOOLEAN NOT NULL DEFAULT false
                       )`;
-
-  pool.query(usersQuery)
-    .then((res) => {
-      console.log(res);
-      pool.end();
-    })
-    .catch((err) => {
-      console.log(err);
-      pool.end();
-    });
+  queries.push(usersQuery);
+  for (let i = 0; i < queries.length; i++) {
+    pool.query(queries[i])
+      .then((res) => {
+        console.log(res);
+        pool.end();
+      })
+      .catch((err) => {
+        console.log(err);
+        pool.end();
+      });
+  }
 };
 
 /**
  * Drop Tables
  */
-const dropTable = () => {
+const dropTables = () => {
+  const queries = [];
   const usersQuery = 'DROP TABLE IF EXISTS users';
-  pool.query(usersQuery)
-    .then((res) => {
-      console.log(res);
-      pool.end();
-    })
-    .catch((err) => {
-      console.log(err);
-      pool.end();
-    });
+  queries.push(usersQuery);
+  for (let i = 0; i < queries.length; i++) {
+    pool.query(queries[i])
+      .then((res) => {
+        console.log(res);
+        pool.end();
+      })
+      .catch((err) => {
+        console.log(err);
+        pool.end();
+      });
+  }
 };
+
 
 pool.on('remove', () => {
   console.log('client removed');
@@ -62,8 +70,8 @@ pool.on('remove', () => {
 });
 
 module.exports = {
-  createTable,
-  dropTable,
+  createTables,
+  dropTables,
 };
 
 require('make-runnable');

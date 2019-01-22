@@ -45,7 +45,7 @@ class User {
                 if (e) {
                   res.json({ status: 404, error: e.detail });
                 } else {
-                  res.json({ status: 202, data: r.rows });
+                  res.json({ status: 200, data: r.rows });
                 }
               });
             });
@@ -81,7 +81,7 @@ class User {
               const hash = r.rows[0].password;
               bcrypt.compare(user.password, hash, function (err, response) {
                 if (response) {
-                  res.json({ status: 202, data: r.rows });
+                  res.json({ status: 200, data: r.rows });
                 } else {
                   res.json({ status: 404, error: 'Incorrect password' });
                 }

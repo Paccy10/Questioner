@@ -20,6 +20,7 @@
 		"max-len": "off",
 		"eqeqeq": "off",
 		"no-lonely-if": "off",
-		"class-methods-use-this": "off"
+		"class-methods-use-this": "off",
+		"import/no-extraneous-dependencies": "off"
 	}
 }
