@@ -20,5 +20,6 @@
 		"max-len": "off",
 		"eqeqeq": "off",
 		"no-lonely-if": "off",
+		"class-methods-use-this": "off"
 	}
 }
