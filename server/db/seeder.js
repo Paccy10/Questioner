@@ -21,7 +21,7 @@ const addUser = () => {
       if (err) {
         console.log(err);
       } else {
-        console.log('New user is inserted.');
+        console.log('');
       }
     });
   });
@@ -39,7 +39,7 @@ const removeAllUsers = () => {
       if (err) {
         console.log(err);
       } else {
-        console.log('All Users are removed from the table.');
+        console.log('');
       }
     });
   });
