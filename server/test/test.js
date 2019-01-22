@@ -14,7 +14,7 @@ chai.use(require('chai-things'));
 
 
 describe('Questioner', () => {
-  before((done) => {
+  beforeEach((done) => {
     db.removeAllUsers();
     db.addUser();
     done();
