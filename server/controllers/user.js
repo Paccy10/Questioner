@@ -3,8 +3,8 @@ import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import validateUserSignup from '../helpers/validateUserSignup';
+import validateUserLogin from '../helpers/validateUserLogin';
 
-// router.use(bodyParser.urlencoded({ extended: false }));
 
 dotenv.config();
 
@@ -54,58 +54,47 @@ class User {
       }
     }
   }
+
+  getOne(req, res) {
+    const user = {
+      username: req.body.username.trim().replace(/\s+/g, ' '),
+      password: req.body.password.trim().replace(/\s+/g, ' '),
+    };
+
+    const { error } = validateUserLogin(user);
+    if (error) {
+      res.json({ status: 404, error: error.details[0].message });
+    } else {
+      const query = 'SELECT * FROM users WHERE username = $1';
+      const values = [user.username];
+
+      pool.connect((er, client, done) => {
+        if (er) throw er;
+        client.query(query, values, (e, r) => {
+          done();
+          if (e) {
+            res.json({ status: 404, error: e.detail });
+          } else {
+            if (r.rowCount == 0) {
+              res.json({ status: 404, error: 'Incorrect username' });
+            } else {
+              const hash = r.rows[0].password;
+              bcrypt.compare(user.password, hash, function (err, response) {
+                if (response) {
+                  res.json({ status: 202, data: r.rows });
+                } else {
+                  res.json({ status: 404, error: 'Incorrect password' });
+                }
+              });
+            }
+          }
+        });
+      });
+    }
+  }
 }
 
 const user = new User();
 
 
 export default user;
-
-// function validateUserLogin(user) {
-//   const schema = Joi.object({
-//     username: Joi.string().required(),
-//     password: Joi.string().min(6).required(),
-//   }).unknown();
-
-//   return Joi.validate(user, schema);
-// }
-
-// router.post('/login', function (req, res) {
-//   const user = {
-//     username: req.body.username.trim().replace(/\s+/g, ' '),
-//     password: req.body.password.trim().replace(/\s+/g, ' '),
-//   };
-
-//   const { error } = validateUserLogin(user);
-//   if (error) {
-//     res.json({ status: 404, error: error.details[0].message });
-//   } else {
-//     const query = 'SELECT * FROM users WHERE username = $1';
-//     const values = [user.username];
-
-//     pool.connect((er, client, done) => {
-//       if (er) throw er;
-//       client.query(query, values, (e, r) => {
-//         done();
-//         if (e) {
-//           res.json({ status: 404, error: e.detail });
-//         } else {
-//           if (r.rowCount == 0) {
-//             res.json({ status: 404, error: 'Incorrect username' });
-//           } else {
-//             const hash = r.rows[0].password;
-//             bcrypt.compare(user.password, hash, function (err, response) {
-//               if (response) {
-//                 res.json({ status: 202, data: r.rows });
-//               } else {
-//                 res.json({ status: 404, error: 'Incorrect password' });
-//               }
-//             });
-//           }
-//         }
-//       });
-//     });
-//   }
-// });
-
-// module.exports = router;
