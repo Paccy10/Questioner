@@ -9,6 +9,38 @@ const pool = new Pool({
 });
 
 /**
+ * Remove all Users
+ */
+const removeAllUsers = () => {
+  const query = 'DELETE FROM users';
+  pool.connect((er, client, done) => {
+    if (er) throw er;
+    client.query(query, (err, res) => {
+      done();
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+};
+
+/**
+ * Remove all Users
+ */
+const removeAllMeetups = () => {
+  const query = 'DELETE FROM meetups';
+  pool.connect((er, client, done) => {
+    if (er) throw er;
+    client.query(query, (err, res) => {
+      done();
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+};
+
+/**
  * Add User
  */
 const addUser = () => {
@@ -20,32 +52,31 @@ const addUser = () => {
       done();
       if (err) {
         console.log(err);
-      } else {
-        console.log('');
       }
     });
   });
 };
 
 /**
- * Remove all Users
+ * Add Meetup
  */
-const removeAllUsers = () => {
-  const query = 'DELETE FROM users';
+const addMeetup = () => {
+  const query = 'INSERT INTO meetups(created_on, location, images, topic, happening_on, tags) VALUES($1, $2, $3, $4, $5, $6)';
+  const values = [moment(new Date()), 'Kigali Serena Hotel', ['http://tourer.ewco.se/wp-content/uploads/2012/12/rwanda-telecom-house-SMALL-500x376.jpg', 'https://er.educause.edu/~/media/images/articles/2015/3/ero1539image1.jpg'], 'Node JS', '2019-02-20', ['Programming', 'Javascript']];
   pool.connect((er, client, done) => {
     if (er) throw er;
-    client.query(query, (err, res) => {
+    client.query(query, values, (err, res) => {
       done();
       if (err) {
         console.log(err);
-      } else {
-        console.log('');
       }
     });
   });
 };
 
 export default {
-  addUser,
   removeAllUsers,
+  removeAllMeetups,
+  addUser,
+  addMeetup,
 };

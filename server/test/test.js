@@ -14,9 +14,11 @@ chai.use(require('chai-things'));
 
 
 describe('Questioner', () => {
-  beforeEach((done) => {
+  before((done) => {
     db.removeAllUsers();
+    db.removeAllMeetups();
     db.addUser();
+    db.addMeetup();
     done();
   });
 
@@ -79,6 +81,27 @@ describe('Questioner', () => {
           res.body.data.should.all.have.property('email', userResponse.email);
           res.body.data.should.all.have.property('phone_number', userResponse.phone_number);
           res.body.data.should.all.have.property('username', userResponse.username);
+          done();
+        });
+    });
+  });
+
+  describe('Meetups', () => {
+    it('should GET all the meetups', (done) => {
+      chai.request(app)
+        .get('/api/v1/meetups')
+        .end((err, res) => {
+          res.body.should.be.a('object');
+          res.body.should.have.property('status').eql(200);
+          res.body.should.have.property('data');
+          res.body.data.should.be.a('array');
+          res.body.data.should.all.have.property('id');
+          res.body.data.should.all.have.property('created_on');
+          res.body.data.should.all.have.property('location');
+          res.body.data.should.all.have.property('images');
+          res.body.data.should.all.have.property('topic');
+          res.body.data.should.all.have.property('happening_on');
+          res.body.data.should.all.have.property('tags');
           done();
         });
     });

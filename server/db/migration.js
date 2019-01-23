@@ -30,6 +30,19 @@ const createTables = () => {
                         is_admin BOOLEAN NOT NULL DEFAULT false
                       )`;
   queries.push(usersQuery);
+
+  const meetupsQuery = `CREATE TABLE IF NOT EXISTS
+                      meetups(
+                        id SERIAL NOT NULL PRIMARY KEY,
+                        created_on TIMESTAMP NOT NULL,
+                        location VARCHAR(200) NOT NULL,
+                        images VARCHAR [],
+                        topic VARCHAR(200) NOT NULL,
+                        happening_on DATE NOT NULL,
+                        tags VARCHAR []
+                      )`;
+  queries.push(meetupsQuery);
+
   for (let i = 0; i < queries.length; i++) {
     pool.query(queries[i])
       .then((res) => {
@@ -50,6 +63,10 @@ const dropTables = () => {
   const queries = [];
   const usersQuery = 'DROP TABLE IF EXISTS users';
   queries.push(usersQuery);
+
+  const meetupsQuery = 'DROP TABLE IF EXISTS meetups';
+  queries.push(meetupsQuery);
+
   for (let i = 0; i < queries.length; i++) {
     pool.query(queries[i])
       .then((res) => {
