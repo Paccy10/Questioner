@@ -1,6 +1,6 @@
-const { Pool } = require('pg');
-const dotenv = require('dotenv');
-const moment = require('moment');
+import { Pool } from 'pg';
+import dotenv from 'dotenv';
+import moment from 'moment';
 
 dotenv.config();
 
@@ -45,7 +45,7 @@ const removeAllUsers = () => {
   });
 };
 
-module.exports = {
+export default {
   addUser,
   removeAllUsers,
 };

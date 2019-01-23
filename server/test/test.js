@@ -6,7 +6,7 @@ import moment from 'moment';
 
 import app from '../../app';
 
-const db = require('../db/seeder');
+import db from '../db/seeder';
 
 chai.should();
 chai.use(chaiHttp);
