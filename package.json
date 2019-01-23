@@ -4,8 +4,8 @@
   "description": "Andela Developer Challenge",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "mocha --exit"
+    "start": "nodemon --exec babel-node app.js",
+    "test": "mocha --compilers js:babel-core/register server/test/* --exit"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Paccy10/Questioner#readme",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
     "chai-things": "^0.2.0",
@@ -32,6 +34,7 @@
     "mocha-lcov-reporter": "^1.3.0"
   },
   "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",

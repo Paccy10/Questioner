@@ -9,3 +9,10 @@ jobs:
     - stage: Produce Coverage
       node_js: node
       script: jest --forceExit --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database questioner_db;' -U postgres  
+  - node server/db/migration createTables      
