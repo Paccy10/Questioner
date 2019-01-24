@@ -2,9 +2,11 @@ import moment from 'moment';
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import validateUserSignup from '../helpers/validateUserSignup';
 import validateUserLogin from '../helpers/validateUserLogin';
 import queries from '../db/queries';
+import authKey from '../middlewares/keys';
 
 dotenv.config();
 
@@ -13,7 +15,7 @@ const pool = new Pool({
 });
 
 class User {
-  create(req, res) {
+  signup(req, res) {
     const user = {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
@@ -45,7 +47,28 @@ class User {
                 if (e) {
                   res.status(400).json({ status: 400, error: e.detail });
                 } else {
-                  res.status(201).json({ status: 201, data: r.rows });
+                  const userlog = {
+                    id: r.rows[0].id,
+                    firstname: r.rows[0].firstname,
+                    lastname: r.rows[0].lastname,
+                    othername: r.rows[0].othername,
+                    email: r.rows[0].email,
+                    phone_number: r.rows[0].phone_number,
+                    username: r.rows[0].username,
+                  };
+
+                  jwt.sign(userlog, authKey, { expiresIn: 3600 }, (err1, token) => {
+                    if (err1) {
+                      throw err1;
+                    }
+                    res.status(201).json({
+                      status: 201,
+                      data: [{
+                        token,
+                        user: r.rows[0],
+                      }],
+                    });
+                  });
                 }
               });
             });
@@ -55,7 +78,7 @@ class User {
     }
   }
 
-  getOne(req, res) {
+  login(req, res) {
     const user = {
       username: req.body.username,
       password: req.body.password,
@@ -81,7 +104,28 @@ class User {
               const hash = r.rows[0].password;
               bcrypt.compare(user.password.trim(), hash, function (err, response) {
                 if (response) {
-                  res.json({ status: 200, data: r.rows });
+                  const userlog = {
+                    id: r.rows[0].id,
+                    firstname: r.rows[0].firstname,
+                    lastname: r.rows[0].lastname,
+                    othername: r.rows[0].othername,
+                    email: r.rows[0].email,
+                    phone_number: r.rows[0].phone_number,
+                    username: r.rows[0].username,
+                  };
+
+                  jwt.sign(userlog, authKey, { expiresIn: 3600 }, (err1, token) => {
+                    if (err1) {
+                      throw err1;
+                    }
+                    res.status(200).json({
+                      status: 200,
+                      data: [{
+                        token,
+                        user: r.rows[0],
+                      }],
+                    });
+                  });
                 } else {
                   res.status(404).json({ status: 404, error: 'Incorrect password' });
                 }
