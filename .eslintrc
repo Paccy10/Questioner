@@ -21,6 +21,7 @@
 		"eqeqeq": "off",
 		"no-lonely-if": "off",
 		"class-methods-use-this": "off",
-		"import/no-extraneous-dependencies": "off"
+		"import/no-extraneous-dependencies": "off",
+		"no-empty": "off"
 	}
 }

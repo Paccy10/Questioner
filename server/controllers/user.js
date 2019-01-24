@@ -2,9 +2,11 @@ import moment from 'moment';
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import validateUserSignup from '../helpers/validateUserSignup';
 import validateUserLogin from '../helpers/validateUserLogin';
-
+import queries from '../db/queries';
+import authKey from '../middlewares/keys';
 
 dotenv.config();
 
@@ -13,39 +15,60 @@ const pool = new Pool({
 });
 
 class User {
-  create(req, res) {
+  signup(req, res) {
     const user = {
-      firstname: req.body.firstname.trim().replace(/\s+/g, ' '),
-      lastname: req.body.lastname.trim().replace(/\s+/g, ' '),
-      othername: req.body.othername.trim().replace(/\s+/g, ' '),
-      email: req.body.email.trim().replace(/\s+/g, ''),
-      phone_number: req.body.phone_number.trim(),
-      username: req.body.username.trim().replace(/\s+/g, ' '),
-      password: req.body.password.trim().replace(/\s+/g, ' '),
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      othername: req.body.othername,
+      email: req.body.email,
+      phone_number: req.body.phone_number,
+      username: req.body.username,
+      password: req.body.password,
       registered: moment(new Date()),
     };
 
     const { error } = validateUserSignup(user);
     if (error) {
-      res.json({ status: 404, error: error.details[0].message });
+      res.status(400).json({ status: 400, error: error.details[0].message });
     } else {
-      if (/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/.test(user.phone_number) == false) {
+      if (/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/.test(user.phone_number.trim()) == false) {
         res.json({ status: 404, error: 'Invalid Phone number. It must look like (+250780000000 or 0780000000)' });
       } else {
-        bcrypt.hash(user.password, 10, function (err, hash) {
+        bcrypt.hash(user.password.trim(), 10, function (err, hash) {
           if (err) {
-            res.json({ status: 404, error: err });
+            res.status(404).json({ status: 404, error: err });
           } else {
-            const query = 'INSERT INTO users(firstname, lastname, othername, email, phone_number, username,password, registered) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *';
-            const values = [user.firstname, user.lastname, user.othername, user.email, user.phone_number, user.username, hash, user.registered];
+            const query = queries.signup;
+            const values = [user.firstname.trim().replace(/\s+/g, ' '), user.lastname.trim().replace(/\s+/g, ' '), user.othername, user.email.trim().replace(/\s+/g, ''), user.phone_number.trim(), user.username.trim().replace(/\s+/g, ' '), hash, user.registered];
             pool.connect((er, client, done) => {
               if (er) throw er;
               client.query(query, values, (e, r) => {
                 done();
                 if (e) {
-                  res.json({ status: 404, error: e.detail });
+                  res.status(400).json({ status: 400, error: e.detail });
                 } else {
-                  res.json({ status: 200, data: r.rows });
+                  const userlog = {
+                    id: r.rows[0].id,
+                    firstname: r.rows[0].firstname,
+                    lastname: r.rows[0].lastname,
+                    othername: r.rows[0].othername,
+                    email: r.rows[0].email,
+                    phone_number: r.rows[0].phone_number,
+                    username: r.rows[0].username,
+                  };
+
+                  jwt.sign(userlog, authKey, { expiresIn: 3600 }, (err1, token) => {
+                    if (err1) {
+                      throw err1;
+                    }
+                    res.status(201).json({
+                      status: 201,
+                      data: [{
+                        token,
+                        user: r.rows[0],
+                      }],
+                    });
+                  });
                 }
               });
             });
@@ -55,18 +78,18 @@ class User {
     }
   }
 
-  getOne(req, res) {
+  login(req, res) {
     const user = {
-      username: req.body.username.trim().replace(/\s+/g, ' '),
-      password: req.body.password.trim().replace(/\s+/g, ' '),
+      username: req.body.username,
+      password: req.body.password,
     };
 
     const { error } = validateUserLogin(user);
     if (error) {
-      res.json({ status: 404, error: error.details[0].message });
+      res.status(400).json({ status: 400, error: error.details[0].message });
     } else {
-      const query = 'SELECT * FROM users WHERE username = $1';
-      const values = [user.username];
+      const query = queries.login;
+      const values = [user.username.trim()];
 
       pool.connect((er, client, done) => {
         if (er) throw er;
@@ -76,14 +99,35 @@ class User {
             res.json({ status: 404, error: e.detail });
           } else {
             if (r.rowCount == 0) {
-              res.json({ status: 404, error: 'Incorrect username' });
+              res.status(404).json({ status: 404, error: 'Incorrect username' });
             } else {
               const hash = r.rows[0].password;
-              bcrypt.compare(user.password, hash, function (err, response) {
+              bcrypt.compare(user.password.trim(), hash, function (err, response) {
                 if (response) {
-                  res.json({ status: 200, data: r.rows });
+                  const userlog = {
+                    id: r.rows[0].id,
+                    firstname: r.rows[0].firstname,
+                    lastname: r.rows[0].lastname,
+                    othername: r.rows[0].othername,
+                    email: r.rows[0].email,
+                    phone_number: r.rows[0].phone_number,
+                    username: r.rows[0].username,
+                  };
+
+                  jwt.sign(userlog, authKey, { expiresIn: 3600 }, (err1, token) => {
+                    if (err1) {
+                      throw err1;
+                    }
+                    res.status(200).json({
+                      status: 200,
+                      data: [{
+                        token,
+                        user: r.rows[0],
+                      }],
+                    });
+                  });
                 } else {
-                  res.json({ status: 404, error: 'Incorrect password' });
+                  res.status(404).json({ status: 404, error: 'Incorrect password' });
                 }
               });
             }

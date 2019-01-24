@@ -14,71 +14,47 @@ chai.use(require('chai-things'));
 
 
 describe('Questioner', () => {
-  beforeEach((done) => {
-    db.removeAllUsers();
-    db.addUser();
+  before((done) => {
+    db.removeAllMeetups();
+    db.addMeetup();
     done();
   });
 
-  describe('Users', () => {
-    it('should SIGNUP a user', (done) => {
-      const user = {
-        firstname: 'Charles',
-        lastname: 'Mutagorama',
-        othername: '',
-        email: 'cmutagorama@gmail.com',
-        phone_number: '0781983488',
-        username: 'CharlyMuta',
-        password: 'password',
-        registered: moment(new Date()),
-      };
+  describe('Meetups', () => {
+    it('should GET all the meetups', (done) => {
       chai.request(app)
-        .post('/api/v1/auth/signup')
-        .send(user)
+        .get('/api/v1/meetups')
         .end((err, res) => {
           res.body.should.be.a('object');
           res.body.should.have.property('status').eql(200);
           res.body.should.have.property('data');
           res.body.data.should.be.a('array');
-          res.body.data.should.all.have.property('firstname', user.firstname);
-          res.body.data.should.all.have.property('lastname', user.lastname);
-          res.body.data.should.all.have.property('othername', user.othername);
-          res.body.data.should.all.have.property('email', user.email);
-          res.body.data.should.all.have.property('phone_number', user.phone_number);
-          res.body.data.should.all.have.property('username', user.username);
+          res.body.data.should.all.have.property('id');
+          res.body.data.should.all.have.property('created_on');
+          res.body.data.should.all.have.property('location');
+          res.body.data.should.all.have.property('images');
+          res.body.data.should.all.have.property('topic');
+          res.body.data.should.all.have.property('happening_on');
+          res.body.data.should.all.have.property('tags');
           done();
         });
     });
 
-    it('should Login a user', (done) => {
-      const user = {
-        username: 'Paccy10',
-        password: 'password',
-      };
-
-      const userResponse = {
-        firstname: 'Pacifique',
-        lastname: 'Ndayisenga',
-        othername: 'Clement',
-        email: 'pacifiqueclement@gmail.com',
-        phone_number: '0781983488',
-        username: 'Paccy10',
-        password: '$2a$10$9ErZa7Rw/OPHp1mLllOi1uK/3omWtjaagg.fZyquC3i11rn0WoKZ.',
-      };
+    it('should GET all the upcoming meetups', (done) => {
       chai.request(app)
-        .post('/api/v1/auth/login')
-        .send(user)
+        .get('/api/v1/meetups/upcoming')
         .end((err, res) => {
           res.body.should.be.a('object');
           res.body.should.have.property('status').eql(200);
           res.body.should.have.property('data');
           res.body.data.should.be.a('array');
-          res.body.data.should.all.have.property('firstname', userResponse.firstname);
-          res.body.data.should.all.have.property('lastname', userResponse.lastname);
-          res.body.data.should.all.have.property('othername', userResponse.othername);
-          res.body.data.should.all.have.property('email', userResponse.email);
-          res.body.data.should.all.have.property('phone_number', userResponse.phone_number);
-          res.body.data.should.all.have.property('username', userResponse.username);
+          res.body.data.should.all.have.property('id');
+          res.body.data.should.all.have.property('created_on');
+          res.body.data.should.all.have.property('location');
+          res.body.data.should.all.have.property('images');
+          res.body.data.should.all.have.property('topic');
+          res.body.data.should.all.have.property('happening_on');
+          res.body.data.should.all.have.property('tags');
           done();
         });
     });
