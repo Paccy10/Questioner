@@ -7,7 +7,7 @@
     "start": "nodemon --exec babel-node app.js",
     "test": "mocha --exit --compilers js:babel-core/register server/test/*",
     "heroku-postbuild": "npm install",
-    "heroku-start": "babel-node app.js"
+    "start-heroku": "babel-node app.js"
   },
   "repository": {
     "type": "git",
