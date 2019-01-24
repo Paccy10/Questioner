@@ -43,6 +43,28 @@ const createTables = () => {
                       )`;
   queries.push(meetupsQuery);
 
+  const rsvpsQuery = `CREATE TABLE IF NOT EXISTS
+                      rsvps(
+                        id SERIAL NOT NULL PRIMARY KEY,
+                        meetup_id INTEGER NOT NULL REFERENCES meetups(id) ON DELETE CASCADE,
+                        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                        response VARCHAR(50)
+                      )`;
+  queries.push(rsvpsQuery);
+
+  // const questionsQuery = `CREATE TABLE IF NOT EXISTS
+  //                     questions(
+  //                       id SERIAL NOT NULL PRIMARY KEY,
+  //                       created_on TIMESTAMP NOT NULL,
+  //                       user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  //                       meetup_id INTEGER NOT NULL REFERENCES meetups(id) ON DELETE CASCADE,
+  //                       title VARCHAR(200) NOT NULL,
+  //                       body TEXT NOT NULL,
+  //                       upvotes INTEGER NOT NULL DEFAULT 0,
+  //                       downvotes INTEGER NOT NULL DEFAULT 0
+  //                     )`;
+  // queries.push(questionsQuery);
+
   for (let i = 0; i < queries.length; i++) {
     pool.query(queries[i])
       .then((res) => {
@@ -61,10 +83,16 @@ const createTables = () => {
  */
 const dropTables = () => {
   const queries = [];
-  const usersQuery = 'DROP TABLE IF EXISTS users';
+  // const questionsQuery = 'DROP TABLE IF EXISTS questions';
+  // queries.push(questionsQuery);
+
+  const rsvpsQuery = 'DROP TABLE IF EXISTS rsvps';
+  queries.push(rsvpsQuery);
+
+  const usersQuery = 'DROP TABLE IF EXISTS users CASCADE';
   queries.push(usersQuery);
 
-  const meetupsQuery = 'DROP TABLE IF EXISTS meetups';
+  const meetupsQuery = 'DROP TABLE IF EXISTS meetups CASCADE';
   queries.push(meetupsQuery);
 
   for (let i = 0; i < queries.length; i++) {

@@ -41,6 +41,22 @@ const removeAllMeetups = () => {
 };
 
 /**
+ * Remove all Users
+ */
+const removeAllRsvps = () => {
+  const query = 'DELETE FROM rsvps';
+  pool.connect((er, client, done) => {
+    if (er) throw er;
+    client.query(query, (err, res) => {
+      done();
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+};
+
+/**
  * Add User
  */
 const addUser = () => {
@@ -77,6 +93,7 @@ const addMeetup = () => {
 export default {
   removeAllUsers,
   removeAllMeetups,
+  removeAllRsvps,
   addUser,
   addMeetup,
 };
