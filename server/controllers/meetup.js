@@ -158,7 +158,7 @@ class Meetup {
           });
         });
       } else {
-        res.status(400).json({ status: 400, error: 'Invalid response' });
+        res.status(400).json({ status: 400, error: 'Invalid response. It must be(Yes, No or Maybe)' });
       }
     }
   }
