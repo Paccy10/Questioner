@@ -27,6 +27,10 @@ npm test
 
 # API Endpoints
 
+  `POST api/v1/auth/signup` to create a user
+
+  `POST api/v1/auth/login` to login
+
   `POST api/v1/meetups` to create a meetup
 
   `GET api/v1/meetups` to get all meetups
