@@ -17,7 +17,7 @@ app.use(questionRoutes);
 
 // Invalid routes
 app.use(function (req, res) {
-  res.status(400).json({ status: 404, error: 'Invalid URL' });
+  res.status(400).json({ status: 400, error: 'Invalid URL' });
 });
 
 const port = process.env.PORT || 3000;
