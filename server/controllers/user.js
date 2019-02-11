@@ -65,7 +65,7 @@ class User {
                       status: 201,
                       data: [{
                         token,
-                        user: r.rows[0],
+                        user: userlog,
                       }],
                     });
                   });
@@ -122,7 +122,7 @@ class User {
                       status: 200,
                       data: [{
                         token,
-                        user: r.rows[0],
+                        user: userlog,
                       }],
                     });
                   });

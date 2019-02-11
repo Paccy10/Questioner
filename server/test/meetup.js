@@ -1,11 +1,7 @@
 import chai from 'chai';
-
 import chaiHttp from 'chai-http';
-
 import moment from 'moment';
-
 import app from '../../app';
-
 import db from '../db/seeder';
 
 chai.should();

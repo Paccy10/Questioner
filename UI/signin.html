@@ -30,44 +30,88 @@
 	<div class="content container-img">
 		<div class="content-inside">
 			<div class="container">
+				<div id="error-msg"></div>
 				<div id="signin-card" class="card">
 					<h2>Sign In</h2>
 					<hr>
-					<form class="form">
+					<form class="form" id="my-form">
 						<div>
-							<label>Email</label><br>
-							<input type="email" name="email" placeholder="Email Address">
+							<label>Username</label><br>
+							<input type="text" id="username" name="username" placeholder="Username">
 						</div>
 
 						<div>
 							<label>Password</label><br>
-							<input type="password" name="password" placeholder="Password">
+							<input type="password" id="password" name="password" placeholder="Password">
 						</div>
 
-						<button class="button_1" type="submit">Sign In</button>
+						<button class="button_1" type="submit" id="login_button">Sign In</button>
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
 	<footer>
-		<p>Questioner, Copyright &copy; 2018</p>
+		<p>Questioner, Copyright &copy; 2019</p>
 	</footer>
 
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-	  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-	  crossorigin="anonymous"></script>
 	<script type="text/javascript">
-	 	$(document).ready(function(){
-	 		$('.menu-toggle').click(function(){
-	 			$('nav').toggleClass('current');
-	 		})
+		var getSiblings = function (elem) {
+			var siblings = [];
+			var sibling = elem.parentNode.firstChild;
+			var skipMe = elem;
+			for ( ; sibling; sibling = sibling.nextSibling ) 
+			if ( sibling.nodeType == 1 && sibling != elem )
+				siblings.push( sibling );
+			return siblings;
+		}
+		document.getElementsByClassName('menu-toggle')[0].onclick = function (){
+			document.getElementsByTagName('nav')[0].classList.toggle('current');
+		};
 
-	 		$('ul li').click(function(){
-		 		$(this).siblings().removeClass('current');
-		 		$(this).toggleClass('current');
-		 	})
-	 	});
-	 </script>
+		document.getElementsByClassName('sub-menu')[0].onclick = function() {
+			getSiblings(document.getElementsByClassName('sub-menu')[0]).forEach(sibling => {
+				sibling.classList.remove('current');
+			});
+			document.getElementsByClassName('sub-menu')[0].classList.toggle('current');
+		};
+	</script>
+
+	<script>
+		document.getElementById('my-form').addEventListener('submit', login);
+
+		function login(e){
+			e.preventDefault();
+
+			let error_msg = document.getElementById('error-msg');
+			let signin_card = document.getElementById('signin-card');
+			let username = document.getElementById('username').value;
+			let password = document.getElementById('password').value;
+
+			fetch('http://localhost:3000/api/v1/auth/login', {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json, text/plain, */*',
+					'Content-type': 'application/json'
+				},
+				body: JSON.stringify({username: username, password: password})
+			}).then((res) => res.json())
+			  .then((data) => {
+				  if(data.status == 404 || data.status == 400) {
+					  error_msg.style.display = 'block';
+					  signin_card.style.marginTop = '5%';
+					  error_msg.innerHTML = data.error;
+				  } else {
+					if(window.matchMedia("(max-width: 768px)").matches){
+						signin_card.style.marginTop = '22%';
+					} else {
+						signin_card.style.marginTop = '12%';
+					}
+					error_msg.style.display = 'none';
+					window.location.replace("meetups.html");
+				  }
+			  });
+		}
+	</script>
 </body>
 </html>
