@@ -39,10 +39,10 @@
 							<th>#</th>
 							<th>Topic</th>
 							<th>Location</th>
-							<th>Date & Time</th>
+							<th>Happening On</th>
 							<th></th>
 						</tr>
-						<tr>
+						<!-- <tr>
 							<td>1</td>
 							<td>Javascript Meetup</td>
 							<td>Kigali Heights</td>
@@ -69,7 +69,7 @@
 							<td>Kigali Heights</td>
 							<td>20/12/2018 12:30</td>
 							<td><a href="meetup.html" class="button_2">Details</a></td>
-						</tr>
+						</tr> -->
 					</table>
 				</article>
 			</div>
@@ -99,6 +99,49 @@
 			});
 			document.getElementsByClassName('sub-menu')[0].classList.toggle('current');
 		};
+	</script>
+
+	<script>
+		fetch('http://localhost:3000/api/v1/meetups', {
+				method: 'GET',
+				headers: {
+					'Accept': 'application/json, text/plain, */*',
+					'Content-type': 'application/json',
+					'Authorization': localStorage.getItem('token')
+				}
+			}).then((res) => res.json())
+			.then((data) => {
+				  if(data.status == 404) {
+					  console.log(data.error);
+				  } else {
+					data.data.forEach(function(meetup){
+						var meetup_data = '<a>Ok</a>';
+						// meetup_data += '<tr>';
+						// meetup_data += '<td>' + meetup.id + '</td>';
+						// meetup_data += '<td>' + meetup.topic + '</td>';
+						// meetup_data += '<td>' + meetup.location+ '</td>';
+						// meetup_data += '<td>' + meetup.happening_on + '</td>';
+						// meetup_data += '<td> <a href="meetup.html" class="button_2">Details</a> </td>';
+						// meetup_data += '</tr>';
+						var table = document.getElementById('meetups-table');
+						var row = table.insertRow(table.rows.length);
+						var cell1 = row.insertCell(0);
+						var cell2 = row.insertCell(1);
+						var cell3 = row.insertCell(2);
+						var cell4 = row.insertCell(3);
+						var cell5 = row.insertCell(4);
+
+						cell1.innerHTML = table.rows.length - 2;
+						cell2.innerHTML = meetup.topic;
+						cell3.innerHTML = meetup.location;
+						cell4.innerHTML = new Date(meetup.happening_on).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+						cell5.innerHTML = '<a href="meetup.html?id=' + meetup.id  +'" class="button_2">Details</a> </td>';
+
+					});
+				  }
+			}).catch(function(error){
+				console.log(error);
+			});
 	</script>
 </body>
 </html>

@@ -30,29 +30,50 @@
 	<div class="content container-img">
 		<div class="content-inside">
 			<div class="container">
+				<div id="error-msg2" class="error-msg"></div>
 				<div id="signup-card" class="card">
 					<h2>Sign Up</h2>
 					<hr>
-					<form class="form">
+					<form class="form" id="signup-form">
 						<div>
-							<label>Name</label><br>
-							<input type="text" name="name" placeholder="Name">
+							<label>Firstname</label><br>
+							<input type="text" id="firstname" name="firstname" placeholder="Firstname">
+						</div>
+
+						<div>
+							<label>Lastname</label><br>
+							<input type="text" id="lastname" name="lastname" placeholder="Lastname">
+						</div>
+
+						<div>
+							<label>Other name</label><br>
+							<input type="text" id="othername" name="othername" placeholder="Other name">
 						</div>
 
 						<div>
 							<label>Email</label><br>
-							<input type="email" name="email" placeholder="Email Address">
+							<input type="email" id="email" name="email" placeholder="Email Address">
+						</div>
+
+						<div>
+							<label>Phone Number</label><br>
+							<input type="text" id="phone_number" name="phone_number" placeholder="Phone">
+						</div>
+
+						<div>
+							<label>Username</label><br>
+							<input type="text" id="username" name="username" placeholder="Username">
 						</div>
 
 						<div>
 							<label>Password</label><br>
-							<input type="password" name="password" placeholder="Password">
+							<input type="password" id="password" name="password" placeholder="Password">
 						</div>
 
-						<div>
+						<!-- <div>
 							<label>Confirm Password</label><br>
-							<input type="password" name="confirm_password" placeholder="Confirm Password">
-						</div>
+							<input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password">
+						</div> -->
 
 						<button class="button_1" type="submit">Sign Up</button>
 					</form>
@@ -84,6 +105,60 @@
 			});
 			document.getElementsByClassName('sub-menu')[0].classList.toggle('current');
 		};
+	</script>
+
+	<script>
+		document.getElementById('signup-form').addEventListener('submit', signup);
+
+		function signup(e){
+			e.preventDefault();
+
+			let error_msg = document.getElementById('error-msg2');
+			let signup_card = document.getElementById('signup-card');
+			let firstname = document.getElementById('firstname').value;
+			let lastname = document.getElementById('lastname').value;
+			let othername = document.getElementById('othername').value;
+			let email = document.getElementById('email').value;
+			let phone_number = document.getElementById('phone_number').value;
+			let username = document.getElementById('username').value;
+			let password = document.getElementById('password').value;
+			// let confirm_password = document.getElementById('confirm_password').value;
+
+			fetch('https://paccy-questioner.herokuapp.com/api/v1/auth/signup', {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json, text/plain, */*',
+					'Content-type': 'application/json'
+				},
+				body: JSON.stringify(
+					{
+						firstname: firstname,
+						lastname: lastname,
+						othername: othername,
+						email: email,
+						phone_number: phone_number,
+						username: username, 
+						password: password
+					})
+			}).then((res) => res.json())
+			.then((data) => {
+				if(data.status == 404 || data.status == 400) {
+					error_msg.style.display = 'block';
+					signup_card.style.marginTop = '5%';
+					error_msg.innerHTML = data.error;
+				} else {
+					if(window.matchMedia("(max-width: 768px)").matches){
+						signup_card.style.marginTop = '22%';
+					} else {
+						signup_card.style.marginTop = '12%';
+					}
+					error_msg.style.display = 'none';
+					window.location.replace("meetups.html");
+				}
+			}).catch(function(error){
+				console.log(error);
+			});
+		}
 	</script>
 </body>
 </html>
