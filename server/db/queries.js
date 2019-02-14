@@ -10,6 +10,7 @@ const createRsvp = 'INSERT INTO rsvps(meetup_id, user_id, response) VALUES($1, $
 const deleteMeetup = 'DELETE FROM meetups WHERE id = $1';
 
 const createQuestion = 'INSERT INTO questions(created_on, user_id, meetup_id, title, body) VALUES($1, $2, $3, $4, $5) RETURNING *';
+const getAllQuestions = 'SELECT * FROM questions WHERE meetup_id = $1 AND user_id = $2';
 const checkUpvote = 'SELECT * FROM upvotes WHERE user_id = $1 AND question_id = $2';
 const checkDownvote = 'SELECT * FROM downvotes WHERE user_id = $1 AND question_id = $2';
 const upvoteQuestion = 'UPDATE questions SET upvotes = $1, downvotes = $2 WHERE id = $3 RETURNING *';
@@ -34,6 +35,7 @@ export default {
   deleteMeetup,
 
   createQuestion,
+  getAllQuestions,
   checkUpvote,
   checkDownvote,
   upvoteQuestion,

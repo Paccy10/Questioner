@@ -153,6 +153,8 @@
 						signup_card.style.marginTop = '12%';
 					}
 					error_msg.style.display = 'none';
+					localStorage.setItem('token', data.data[0].token); //saving token
+					localStorage.setItem('user_id', data.data[0].user.id); //saving user id
 					window.location.replace("meetups.html");
 				}
 			}).catch(function(error){
