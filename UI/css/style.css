@@ -517,6 +517,19 @@ div#new-meetup-card button{
 }
 /*///////////////*/
 
+/*Success messages*/
+.success-msg{
+	width: 100%;
+	margin: auto;
+	margin-top: 4%;
+	border-radius: 2%;
+	background-color: #28a745;
+	color: #F0F0F0;
+	padding: 20px;
+	display: none;
+}
+/*///////////////*/
+
 /*footer*/
 footer{
 	height: 50px;
