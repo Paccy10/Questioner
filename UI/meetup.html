@@ -31,9 +31,9 @@
 		<div class="content-inside">
 			<div class="container">
 				<div id="meetup-card">
-					<h2>Javascript Meetup</h2>
-					<p>Venue: Kigali Heights</p>
-					<p>Time: 20/12/2018 12:30</p>
+					<h2 id="meetup-topic"></h2>
+					<p id="meetup-location"></p>
+					<p id="meetup-date"></p>
 					<form class="form">
 						<select>
 							<option>Choose a response</option>
@@ -55,8 +55,8 @@
 					
 				</div>
 				<div class="question">
-					<h3>Who are the speakers?</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					<h3 id="question-title">Who are the speakers?</h3>
+					<p id="question-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -102,7 +102,7 @@
 					</div>
 				</div>
 
-				<div class="question">
+				<!-- <div class="question">
 					<h3>Can I bring my laptop?</h3>
 					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -146,7 +146,7 @@
 							tempor incididunt consequat.
 						</div>
 					</div>
-				</div>
+				</div> -->
 
 			</div>
 		</div>
@@ -177,7 +177,54 @@
 		};
 	</script>
 
-	<script type="text/javascript">
+	<script>
+		var urlParams = new URLSearchParams(location.search);
+		var id = urlParams.get('id');
+		fetch('https://paccy-questioner.herokuapp.com/api/v1/meetups/' + id, {
+				method: 'GET',
+				headers: {
+					'Accept': 'application/json, text/plain, */*',
+					'Content-type': 'application/json',
+					'Authorization': localStorage.getItem('token')
+				}
+			}).then((res) => res.json())
+			.then((data) => {
+				  if(data.status == 404) {
+					  console.log(data.error);
+				  } else {
+					var title = document.getElementById('meetup-topic');
+					var location = document.getElementById('meetup-location');
+					var date = document.getElementById('meetup-date');
+
+					var meetup = data.data[0];
+
+					title.innerHTML = meetup.topic;
+					location.innerHTML ="Venue: " + meetup.location;
+					date.innerHTML = "Date: " + new Date(meetup.happening_on).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+
+					fetch('https://paccy-questioner.herokuapp.com/api/v1/meetups/' + meetup.id + '/questions', {
+						method: 'GET',
+						headers: {
+							'Accept': 'application/json, text/plain, */*',
+							'Content-type': 'application/json',
+							'Authorization': localStorage.getItem('token')
+						}
+					})
+					.then((res) => res.json())
+					.then((data) => {
+						if(data.status == 400 || data.status == 404) {
+							console.log(data.error);
+						} else {
+							var title = document.getElementById();
+						}
+					});
+				  }
+			}).catch(function(error){
+				console.log(error);
+			});
+	</script>
+
+	<!-- <script type="text/javascript">
 		function upvote(x) {
 			var icon1 = document.getElementById('upvote-icon');
 			var icon2 = document.getElementById('downvote-icon');
@@ -225,6 +272,6 @@
 				x.style.color = '#606770';
 			}
 		}
-	</script>
+	</script> -->
 </body>
 </html>

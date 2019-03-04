@@ -13,6 +13,54 @@ const pool = new Pool({
 });
 
 class Question {
+  getAll(req, res) {
+    const meetupQuery = queries.getOneMeetup;
+    const meetupValues = [parseInt(req.params.meetup_id)];
+
+    pool.connect((error, client, done) => {
+      if (error) throw error;
+      client.query(meetupQuery, meetupValues, (err, res1) => {
+        done();
+        if (err) {
+          res.status(400).json({ status: 400, error: err.detail });
+        }
+        if (res1.rowCount == 0) {
+          res.status(404).json({ status: 404, data: 'The Meetup with given ID is not found' });
+        }
+        const userQuery = queries.getOneUser;
+        const userValues = [req.user.id];
+
+        pool.connect((err1, client1, done1) => {
+          if (err1) throw err;
+          client1.query(userQuery, userValues, (error2, res2) => {
+            done1();
+            if (error2) {
+              res.status(400).json({ status: 400, error: error2.detail });
+            } else {
+              if (res2.rowCount == 0) {
+                res.status(404).json({ status: 404, data: 'The User with given ID is not found' });
+              } else {
+                const questionsQuery = queries.getAllQuestions;
+                const questionsValues = [parseInt(req.params.meetup_id), parseInt(req.user.id)];
+                pool.connect((error1, client2, done2) => {
+                  if (error1) throw error1;
+                  client2.query(questionsQuery, questionsValues, (err2, res3) => {
+                    done2();
+                    if (err2) {
+                      res.status(400).json({ status: 400, error: err2.detail });
+                    }
+
+                    res.status(200).json({ status: 200, data: res3.rows });
+                  });
+                });
+              }
+            }
+          });
+        });
+      });
+    });
+  }
+
   create(req, res) {
     const question = {
       created_on: moment(new Date()),

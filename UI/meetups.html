@@ -102,7 +102,7 @@
 	</script>
 
 	<script>
-		fetch('http://localhost:3000/api/v1/meetups', {
+		fetch('https://paccy-questioner.herokuapp.com/api/v1/meetups/upcoming', {
 				method: 'GET',
 				headers: {
 					'Accept': 'application/json, text/plain, */*',
@@ -115,14 +115,6 @@
 					  console.log(data.error);
 				  } else {
 					data.data.forEach(function(meetup){
-						var meetup_data = '<a>Ok</a>';
-						// meetup_data += '<tr>';
-						// meetup_data += '<td>' + meetup.id + '</td>';
-						// meetup_data += '<td>' + meetup.topic + '</td>';
-						// meetup_data += '<td>' + meetup.location+ '</td>';
-						// meetup_data += '<td>' + meetup.happening_on + '</td>';
-						// meetup_data += '<td> <a href="meetup.html" class="button_2">Details</a> </td>';
-						// meetup_data += '</tr>';
 						var table = document.getElementById('meetups-table');
 						var row = table.insertRow(table.rows.length);
 						var cell1 = row.insertCell(0);
