@@ -505,7 +505,7 @@ div#new-meetup-card button{
 /*/////////////*/
 
 /*Error messages*/
-#error-msg{
+.error-msg{
 	width: 35%;
 	margin: auto;
 	margin-top: 4%;
@@ -625,7 +625,7 @@ footer{
 		width: 100%;
 	}
 
-	#error-msg{
+	.error-msg{
 		width: 80%;
 		margin: auto;
 		margin-top: 16%;
