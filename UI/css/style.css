@@ -503,6 +503,20 @@ div#new-meetup-card button{
 	margin-top: 10px;
 }
 /*/////////////*/
+
+/*Error messages*/
+#error-msg{
+	width: 35%;
+	margin: auto;
+	margin-top: 4%;
+	border-radius: 2%;
+	background-color: #dc3545;
+	color: #F0F0F0;
+	padding: 20px;
+	display: none;
+}
+/*///////////////*/
+
 /*footer*/
 footer{
 	height: 50px;
@@ -609,6 +623,12 @@ footer{
 	.forms{
 		float: none;
 		width: 100%;
+	}
+
+	#error-msg{
+		width: 80%;
+		margin: auto;
+		margin-top: 16%;
 	}
 
 }
