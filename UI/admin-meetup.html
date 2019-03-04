@@ -152,7 +152,7 @@
 				error_msg.innerHTML ='<strong>Error</strong>: Please select at least one tag';
 			} else {
 				error_msg.style.display = 'none';
-				fetch('http://localhost:3000/api/v1/meetups/' + id + '/tags', {
+				fetch('https://paccy-questioner.herokuapp.com/api/v1/meetups/' + id + '/tags', {
 					method: 'POST',
 					headers: {
 						'Accept': 'application/json, text/plain, */*',
@@ -197,7 +197,7 @@
 				error_msg.innerHTML ='<strong>Error</strong>: Please select at least one tag';
 			} else {
 				error_msg.style.display = 'none';
-				fetch('http://localhost:3000/api/v1/meetups/' + id + '/tags', {
+				fetch('https://paccy-questioner.herokuapp.com/api/v1/meetups/' + id + '/tags', {
 					method: 'POST',
 					headers: {
 						'Accept': 'application/json, text/plain, */*',
