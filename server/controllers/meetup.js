@@ -3,6 +3,7 @@ import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import validateMeetup from '../helpers/validateMeetup';
 import validateRsvp from '../helpers/validateRsvp';
+import validateTag from '../helpers/validateTag';
 import queries from '../db/queries';
 
 dotenv.config();
@@ -161,6 +162,94 @@ class Meetup {
         res.status(400).json({ status: 400, error: 'Invalid response. It must be(Yes, No or Maybe)' });
       }
     }
+  }
+
+  createTag(req, res) {
+    const meetup = {
+      meetup_id: req.params.id,
+    };
+
+    const { error } = validateTag(meetup);
+    if (error) {
+      res.status(400).json({ status: 400, error: error.details[0].message });
+    }
+    const tags = req.body.tag;
+
+    if (tags === undefined || tags.length == 0) {
+      res.status(400).json({ status: 400, error: 'Please add at least one tag!' });
+    }
+
+    const query = queries.addTagToMeetup;
+    const values = [tags, parseInt(meetup.meetup_id)];
+
+    pool.connect((error1, client, done) => {
+      if (error1) throw error1;
+
+      client.query(query, values, (err, result) => {
+        done();
+        if (err) {
+          res.status(400).json({ status: 400, error: err.detail });
+        }
+        const query1 = queries.getOneMeetup;
+        const values1 = [parseInt(meetup.meetup_id)];
+
+        pool.connect((error2, client2, done2) => {
+          if (error2) throw error2;
+
+          client2.query(query1, values1, (err1, result1) => {
+            done2();
+            if (err1) {
+              res.status(400).json({ status: 400, error: err1.detail });
+            }
+            res.status(200).json({ status: 200, data: result1.rows });
+          });
+        });
+      });
+    });
+  }
+
+  createImage(req, res) {
+    const meetup = {
+      meetup_id: req.params.id,
+    };
+
+    const { error } = validateTag(meetup);
+    if (error) {
+      res.status(400).json({ status: 400, error: error.details[0].message });
+    }
+    const images = req.body.image;
+
+    if (images === undefined || images.length == 0) {
+      res.status(400).json({ status: 400, error: 'Please add at least one image URL!' });
+    }
+
+    const query = queries.addImageToMeetup;
+    const values = [images, parseInt(meetup.meetup_id)];
+
+    pool.connect((error1, client, done) => {
+      if (error1) throw error1;
+
+      client.query(query, values, (err, result) => {
+        done();
+        if (err) {
+          res.status(400).json({ status: 400, error: err.detail });
+        }
+        const query1 = queries.getOneMeetup;
+        const values1 = [parseInt(meetup.meetup_id)];
+
+        pool.connect((error2, client2, done2) => {
+          if (error2) throw error2;
+
+          client2.query(query1, values1, (err1, result1) => {
+            done2();
+            if (err1) {
+              res.status(400).json({ status: 400, error: err1.detail });
+            }
+            res.status(200).json({ status: 200, data: result1.rows });
+          });
+        });
+      });
+    });
   }
 }
 

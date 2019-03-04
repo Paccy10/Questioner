@@ -481,6 +481,12 @@ div#new-meetup-card button{
 	padding: 7px;
 }
 
+.forms select{
+	width: 100%;
+	box-sizing: border-box;
+	padding: 7px;
+}
+
 .forms h3{
 	text-align: center;
 }
@@ -502,6 +508,14 @@ div#new-meetup-card button{
 	width: 100%;
 	margin-top: 10px;
 }
+
+.tag{
+	background-color: #28a745;
+	color: #fff;
+	padding: 4px;
+	border-radius: 5px;
+	margin-right: 8px;
+}
 /*/////////////*/
 
 /*Error messages*/
@@ -511,6 +525,19 @@ div#new-meetup-card button{
 	margin-top: 4%;
 	border-radius: 2%;
 	background-color: #dc3545;
+	color: #F0F0F0;
+	padding: 20px;
+	display: none;
+}
+/*///////////////*/
+
+/*Success messages*/
+.success-msg{
+	width: 100%;
+	margin: auto;
+	margin-top: 4%;
+	border-radius: 2%;
+	background-color: #28a745;
 	color: #F0F0F0;
 	padding: 20px;
 	display: none;
