@@ -139,7 +139,7 @@
 						cell2.innerHTML = meetup.topic;
 						cell3.innerHTML = meetup.location;
 						cell4.innerHTML = new Date(meetup.happening_on).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
-						cell5.innerHTML = '<a href="meetup.html?id=' + meetup.id  +'" class="button_2">Details</a> <a id="delete_button' + meetup.id + '" href="#" class="button_3">Delete</a></td>';
+						cell5.innerHTML = '<a href="admin-meetup.html?id=' + meetup.id  +'" class="button_2">Details</a> <a id="delete_button' + meetup.id + '" href="#" class="button_3">Delete</a></td>';
 
 						document.getElementById('delete_button' + meetup.id).addEventListener('click', function(){
 

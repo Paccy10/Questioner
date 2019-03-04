@@ -481,6 +481,12 @@ div#new-meetup-card button{
 	padding: 7px;
 }
 
+.forms select{
+	width: 100%;
+	box-sizing: border-box;
+	padding: 7px;
+}
+
 .forms h3{
 	text-align: center;
 }
@@ -501,6 +507,14 @@ div#new-meetup-card button{
 .forms .button_1{
 	width: 100%;
 	margin-top: 10px;
+}
+
+.tag{
+	background-color: #28a745;
+	color: #fff;
+	padding: 4px;
+	border-radius: 5px;
+	margin-right: 8px;
 }
 /*/////////////*/
 
