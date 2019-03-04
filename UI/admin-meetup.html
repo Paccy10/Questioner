@@ -30,34 +30,36 @@
 	<div class="content">
 		<div class="content-inside">
 			<div class="container">
+				<div id="error-msg4" class="error-msg"></div>
 				<div id="admin-meetup-card">
-					<h2>Javascript Meetup</h2>
-					<p><strong>Venue:</strong> Kigali Heights</p>
-					<p><strong>Time:</strong> 20/12/2018 12:30</p>
+					<h2 id="meetup-title"></h2>
+					<p><strong>Venue:</strong> <span id="meetup-venue"></span></p>
+					<p><strong>Time:</strong> <span id="meetup-time"></span></p>
 					<p><strong>Tags:</strong> 
-						<span lass="tag">Programming</span>
-						<span lass="tag">Javascript</span>
-						<span lass="tag">Coding</span>
+						<span id="tags"></span>
 					</p>
 					<p><strong>Images URLs:</strong>
-						<ul>
-							<li>Image 1</li>
-							<li>Image 2</li>
+						<ul id="images">
 						</ul>
 					</p>
 				</div>
 				<div class="forms">
 					<div class="tags">
-						<form>
-							<h3>Add a new Tag</h3>
-							<input type="text" name="tag">
+						<form id="tags-form">
+							<h3>Add Tags</h3>
+							<select multiple id="tags2">
+								<option value="Java">Java</option>
+								<option value="Android">Android</option>
+								<option value="Programming">Programming</option>
+								<option value="Script">Script</option>
+							</select>
 							<button type="submit" class="button_1">Add</button>
 						</form>
 					</div>
 					<div class="images">
-						<form>
-							<h3>Add a new Image URL</h3>
-							<input type="text" name="image">
+						<form id="images-form">
+							<h3>Add Images</h3>
+							<input type="text" name="images" id="images2" placeholder="Images URLs">
 							<button type="submit" class="button_1">Add</button>
 						</form>
 					</div>
@@ -90,5 +92,138 @@
 			document.getElementsByClassName('sub-menu')[0].classList.toggle('current');
 		};
 	</script>
+
+	<script>
+		var urlParams = new URLSearchParams(location.search);
+		var id = urlParams.get('id');
+		fetch('https://paccy-questioner.herokuapp.com/api/v1/meetups/' + id, {
+				method: 'GET',
+				headers: {
+					'Accept': 'application/json, text/plain, */*',
+					'Content-type': 'application/json',
+					'Authorization': localStorage.getItem('token')
+				}
+			}).then((res) => res.json())
+			.then((data) => {
+				if(data.status == 404) {
+					console.log(data.error);
+				} else {
+					var title = document.getElementById('meetup-title');
+					var location = document.getElementById('meetup-venue');
+					var date = document.getElementById('meetup-time');
+					var tags = document.getElementById('tags');
+					var images = document.getElementById('images');
+
+					var meetup = data.data[0];
+
+					title.innerHTML = meetup.topic;
+					location.innerHTML = meetup.location;
+					date.innerHTML = new Date(meetup.happening_on).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
+					meetup.tags.forEach(tag => {
+						tags.innerHTML += '<span class="tag">' + tag + '</span>';
+					});
+
+					var a = 1;
+					meetup.images.forEach(image => {
+						images.innerHTML += '<li><a href="' + image + '">Image' + a + '</a></li>'
+						a++;
+					});
+
+				}
+			}).catch(function(error){
+				console.log(error);
+			});
+	</script>
+
+	<script>
+		document.getElementById('tags-form').addEventListener('submit', addTags);
+
+		function addTags(e) {
+			e.preventDefault();
+
+			var urlParams = new URLSearchParams(location.search);
+			var id = urlParams.get('id');
+			let error_msg = document.getElementById('error-msg4');
+			let tags = Array.from(document.getElementById('tags2').selectedOptions).map(option => option.value);
+
+			if (tags == ''){
+				error_msg.style.display = 'block';
+				error_msg.style.width = '100%';
+				error_msg.innerHTML ='<strong>Error</strong>: Please select at least one tag';
+			} else {
+				error_msg.style.display = 'none';
+				fetch('http://localhost:3000/api/v1/meetups/' + id + '/tags', {
+					method: 'POST',
+					headers: {
+						'Accept': 'application/json, text/plain, */*',
+						'Content-type': 'application/json',
+						'Authorization': localStorage.getItem('token')
+					},
+					body: JSON.stringify(
+						{
+							tag: tags
+						})
+				}).then((res) => res.json())
+				.then((data) => {
+					if(data.status == 404 || data.status == 400) {
+						error_msg.style.display = 'block';
+						error_msg.style.width = '100%';
+						error_msg.innerHTML ='<strong>Error</strong>: ' + data.error;
+					} else {
+						error_msg.style.display = 'none';
+						window.location.reload();
+					}
+				}).catch(function(error){
+					console.log(error);
+				});
+			}
+		}
+	</script>
+
+	<script>
+		document.getElementById('images-form').addEventListener('submit', addImages);
+
+		function addImages(e) {
+			e.preventDefault();
+
+			var urlParams = new URLSearchParams(location.search);
+			var id = urlParams.get('id');
+			let error_msg = document.getElementById('error-msg4');
+			let images = document.getElementById('images2').value.split(',');
+			console.log(images);
+			if (images == ''){
+				error_msg.style.display = 'block';
+				error_msg.style.width = '100%';
+				error_msg.innerHTML ='<strong>Error</strong>: Please select at least one tag';
+			} else {
+				error_msg.style.display = 'none';
+				fetch('http://localhost:3000/api/v1/meetups/' + id + '/tags', {
+					method: 'POST',
+					headers: {
+						'Accept': 'application/json, text/plain, */*',
+						'Content-type': 'application/json',
+						'Authorization': localStorage.getItem('token')
+					},
+					body: JSON.stringify(
+						{
+							image: images
+						})
+				}).then((res) => res.json())
+				.then((data) => {
+					if(data.status == 404 || data.status == 400) {
+						error_msg.style.display = 'block';
+						error_msg.style.width = '100%';
+						error_msg.innerHTML ='<strong>Error</strong>: ' + data.error;
+					} else {
+						error_msg.style.display = 'none';
+						window.location.reload();
+					}
+				}).catch(function(error){
+					console.log(error);
+				});
+			}
+		}
+	</script>
+	
 </body>
 </html>

@@ -8,6 +8,8 @@ const getAllMeetups = 'SELECT * FROM meetups';
 const getUpcomingMeetups = 'SELECT * FROM meetups WHERE happening_on >= $1';
 const createRsvp = 'INSERT INTO rsvps(meetup_id, user_id, response) VALUES($1, $2, $3) RETURNING *';
 const deleteMeetup = 'DELETE FROM meetups WHERE id = $1';
+const addTagToMeetup = 'UPDATE meetups SET tags = $1 WHERE id = $2';
+const addImageToMeetup = 'UPDATE meetups SET images = $1 WHERE id = $2';
 
 const createQuestion = 'INSERT INTO questions(created_on, user_id, meetup_id, title, body) VALUES($1, $2, $3, $4, $5) RETURNING *';
 const getAllQuestions = 'SELECT * FROM questions WHERE meetup_id = $1 AND user_id = $2';
@@ -33,6 +35,8 @@ export default {
   getUpcomingMeetups,
   createRsvp,
   deleteMeetup,
+  addTagToMeetup,
+  addImageToMeetup,
 
   createQuestion,
   getAllQuestions,

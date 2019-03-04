@@ -11,5 +11,8 @@ router.get('/api/v1/meetups/:id', userAuthentication.verifyToken, Meetup.getOne)
 router.post('/api/v1/meetups/:id/rsvps', userAuthentication.verifyToken, Meetup.createRsvp);
 router.delete('/api/v1/meetups/:id', userAuthentication.verifyToken, userAuthentication.verifyIsAdmin, Meetup.delete);
 
+router.post('/api/v1/meetups/:id/tags', userAuthentication.verifyToken, userAuthentication.verifyIsAdmin, Meetup.createTag);
+router.post('/api/v1/meetups/:id/images', userAuthentication.verifyToken, userAuthentication.verifyIsAdmin, Meetup.createImage);
+
 
 export default router;
